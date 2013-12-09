@@ -1,0 +1,6 @@
+@DEL "Developer Tools for UPnP Technologies-Intel.msi"
+@DEL "Developer Tools for UPnP Technologies-Mesh.msi"
+@COPY "Developer Tools for UPnP Technologies.msi" "Developer Tools for UPnP Technologies-Intel.msi"
+@COPY "Developer Tools for UPnP Technologies.msi" "Developer Tools for UPnP Technologies-Mesh.msi"
+@CALL ".\signmesh.bat" "Developer Tools for UPnP Technologies" "Developer Tools for UPnP Technologies-Mesh.msi"
+@CALL ".\signintel.bat" "Developer Tools for UPnP Technologies" "Developer Tools for UPnP Technologies-Intel.msi"

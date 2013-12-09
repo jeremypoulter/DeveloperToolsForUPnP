@@ -1,0 +1,295 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>3.6</ProductVersion>
+    <ProjectGuid>{be108f48-cee1-4d9a-981f-1b44f0aa4492}</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputName>Developer Tools for UPnP Technologies</OutputName>
+    <OutputType>Package</OutputType>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+    <Name>Tools Installer</Name>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>Debug</DefineConstants>
+    <WixVariables>Build=$(Configuration)</WixVariables>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>Build=$(Configuration)</DefineConstants>
+    <WixVariables>
+    </WixVariables>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|ia64' ">
+    <DefineConstants>Debug</DefineConstants>
+    <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|ia64' ">
+    <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|ia64' ">
+    <DefineConstants>Debug</DefineConstants>
+    <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|ia64' ">
+    <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Globals.wxs" />
+    <Compile Include="Installation Components\DeveloperToolsforUPnPTechnologies.wxs" />
+    <Compile Include="Installation Components\Shortcuts.wxs" />
+    <Compile Include="Installation Components\ZipFile.wxs" />
+    <Compile Include="Product.wxs" />
+    <Compile Include="UI Dialogs\MyCancelDlg.wxs" />
+    <Compile Include="UI Dialogs\MyConfirmUpgradeDlg.wxs" />
+    <Compile Include="UI Dialogs\MyExitDialog.wxs" />
+    <Compile Include="UI Dialogs\MyFatalError.wxs" />
+    <Compile Include="UI Dialogs\MyInstallDirDlg.wxs" />
+    <Compile Include="UI Dialogs\MyLicenseAgreementDlg.wxs" />
+    <Compile Include="UI Dialogs\MyMaintenanceTypeDlg.wxs" />
+    <Compile Include="UI Dialogs\MyMaintenanceWelcomeDlg.wxs" />
+    <Compile Include="UI Dialogs\MyPrepareDlg.wxs" />
+    <Compile Include="UI Dialogs\MyProgressDlg.wxs" />
+    <Compile Include="UI Dialogs\MyResumeDlg.wxs" />
+    <Compile Include="UI Dialogs\MyUserExit.wxs" />
+    <Compile Include="UI Dialogs\MyVerifyReadyDlg.wxs" />
+    <Compile Include="UI Dialogs\MyWelcomeDlg.wxs" />
+    <Compile Include="UI Dialogs\MyWixUI_InstallDir.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WixExtension Include="WixUIExtension">
+      <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
+      <Name>WixUIExtension</Name>
+    </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Properties.wxi" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Constants.wxl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Installation Components" />
+    <Folder Include="UI Dialogs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\CommonComponents\AutoUpdateTool\AutoUpdateTool.csproj">
+      <Name>AutoUpdateTool</Name>
+      <Project>{0b7d3e19-17fa-48cf-bb88-7a810027beb8}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Global\FileHash\FileHash.csproj">
+      <Name>FileHash</Name>
+      <Project>{f1645e22-b869-4ca1-9840-2cf17b27cc33}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Global\MetaData\Metadata.csproj">
+      <Name>Metadata</Name>
+      <Project>{540366d1-629d-4dba-9442-bb839e102d4e}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Global\UPNPAVCDSML\UPnPAVCDSML.csproj">
+      <Name>UPnPAVCDSML</Name>
+      <Project>{8ea0e595-45ec-40c1-82ce-269f4fa9ebb3}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Global\UPNPAVMSCP\UPnPAVMSCP.csproj">
+      <Name>UPnPAVMSCP</Name>
+      <Project>{8901df28-45ed-4bc5-8972-ae463a68e756}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Global\UPNPAVMSDV\UPnPAVMSDV.csproj">
+      <Name>UPnPAVMSDV</Name>
+      <Project>{f080b2d6-53ed-4363-aaa1-17ef02a69b10}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Global\UPNPAV_DeviceRendererStack\UPnPAV_DeviceRendererStack.csproj">
+      <Name>UPnPAV_DeviceRendererStack</Name>
+      <Project>{76f0e0ba-056e-4b30-b09e-f7887ba53b7d}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Global\UPNPAV_RendererStack\UPnPAV_RendererStack.csproj">
+      <Name>UPnPAV_RendererStack</Name>
+      <Project>{e01b6019-acc6-40a6-a511-48d285d51c40}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Global\UPnP\UPnP.csproj">
+      <Name>UPnP</Name>
+      <Project>{584ed187-8f2a-4b58-a266-85f3f212b092}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Global\UPNP_AV\UPnPAV.csproj">
+      <Name>UPnPAV</Name>
+      <Project>{b2439738-5f46-4e59-95a1-92c3df38696f}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Global\ValidatorInterfaces\DeviceValidatorPluginInterfaces.csproj">
+      <Name>DeviceValidatorPluginInterfaces</Name>
+      <Project>{ad112426-e7bb-4ae9-b286-ad21e0cb3e6b}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\DeviceBuilder\DeviceBuilder.csproj">
+      <Name>DeviceBuilder</Name>
+      <Project>{e6813367-f784-444a-a52f-ed598c25ecac}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\DeviceRelay\DeviceRelay.csproj">
+      <Name>DeviceRelay</Name>
+      <Project>{a254be31-7d67-4a0d-9fcf-aa34b5a42c89}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\DeviceSniffer\DeviceSniffer.csproj">
+      <Name>DeviceSniffer</Name>
+      <Project>{a1dca0f5-f74a-4233-b2c4-05199cdacd3b}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\DeviceSpy\DeviceSpy.csproj">
+      <Name>DeviceSpy</Name>
+      <Project>{51fb26bc-2c0f-44d7-9082-e1bfd3be73a4}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\DeviceValidator\DeviceValidator.csproj">
+      <Name>DeviceValidator</Name>
+      <Project>{2c3057b0-6516-40f1-9bb8-7c65484cc2aa}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\MediaController\AVMediaController.csproj">
+      <Name>AVMediaController</Name>
+      <Project>{65616030-e832-4ce1-aa2d-5de7b8a9b4a9}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\MediaRenderer\AVMediaRenderer.csproj">
+      <Name>AVMediaRenderer</Name>
+      <Project>{ce80bc81-1d5b-47e4-bd57-e7a9a2142fa7}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\MediaServer\UPnPMediaServerCore\UPnPMediaServerCore.csproj">
+      <Name>UPnPMediaServerCore</Name>
+      <Project>{658883b6-926a-4482-84ab-43aa3d155f6b}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\MediaServer\UPnPMediaServer\AVMediaServer.csproj">
+      <Name>AVMediaServer</Name>
+      <Project>{0cfcc4f3-4112-4531-aed1-3ec8af936e71}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\MediaWizard\AVMediaWizard.csproj">
+      <Name>AVMediaWizard</Name>
+      <Project>{9f3083c8-eb22-4dd9-a82b-bf0ef223f426}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\NetworkLight\NetworkLight.csproj">
+      <Name>NetworkLight</Name>
+      <Project>{7f52c230-84ab-4c05-8f5d-a4fecfb26ab2}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\ServiceAuthor\ServiceAuthor.csproj">
+      <Name>ServiceAuthor</Name>
+      <Project>{2ccd15de-f3ae-46af-a1c0-d0173537dc64}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="Installer Custom Actions\Installer Custom Actions.csproj">
+      <Name>Installer Custom Actions</Name>
+      <Project>{e0ad88d4-4c50-4f79-b06c-703f06025f1a}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(WixTargetsPath)" />
+  <PropertyGroup>
+    <PreBuildEvent>call ..\..\DeviceBuilderFiles.bat</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>DEL "..\..\..\$(TargetFileName)"
+COPY "!(TargetPath)" "..\..\..\$(TargetFileName)"
+DEL "!(TargetPath)"</PostBuildEvent>
+  </PropertyGroup>
+  <!--
+	To modify your build process, add your task inside one of the targets below and uncomment it.
+	Other similar extension points exist, see Wix.targets.
+	<Target Name="BeforeBuild">
+	</Target>
+	<Target Name="AfterBuild">
+	</Target>
+	-->
+</Project>

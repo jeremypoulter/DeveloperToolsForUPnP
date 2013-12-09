@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Fragment>
+
+    <!--  Add the shortcuts to the Start Menu -->
+    <DirectoryRef Id="APPLICATIONSHORTCUTDIRECTORY">
+      <Component Id="AVMediaControllerShortcut1" Guid="E510F3DA-82AA-11DF-8814-C00000000001">
+        <Shortcut Id="AVMediaControllerStartMenuShortcut" Icon="AVMCIcon1.ico"
+                  Name="AV Media Controller"
+                  Description="Run AV Media Controller"
+                  Target="[APPLICATIONROOTDIRECTORY]AV Media Controller.exe"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" >
+        <Icon Id="AVMCIcon1.ico" SourceFile="!(wix.AVMCIcon)" />
+        </Shortcut>
+        <RemoveFolder Id="APPLICATIONSHORTCUTDIRECTORY" On="uninstall"/>
+        <RegistryValue Root="HKCU" Key="Software\OpenSource\DeveloperToolsforUPnPTechnologies"  Type="integer" Value="2" KeyPath="yes"/>
+      </Component>
+
+      <Component Id="AVMediaServerShortcut1" Guid="E510F3DA-82AA-11DF-8814-C00000000003">
+        <Shortcut Id="AVMediaServerStartMenuShortcut"  Icon="AVMSIcon1.ico"
+                  Name="AV Media Server"
+                  Description="Run AV Media Server"
+                  Target="[APPLICATIONROOTDIRECTORY]AV Media Server.exe"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" >
+        <Icon Id="AVMSIcon1.ico" SourceFile="!(wix.AVMSIcon)" />
+        </Shortcut>
+        <RegistryValue Root="HKCU" Key="Software\OpenSource\DeveloperToolsforUPnPTechnologies"  Type="integer" Value="2" KeyPath="yes"/>
+      </Component>
+
+      <Component Id="AVWizardShortcut1" Guid="E510F3DA-82AA-11DF-8814-C00000000004">
+        <Shortcut Id="AVWizardStartMenuShortcut"  Icon="AVMWIcon1.ico"
+                  Name="AV Wizard"
+                  Description="Run AV Wizard"
+                  Target="[APPLICATIONROOTDIRECTORY]AV Wizard.exe"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" >
+        <Icon Id="AVMWIcon1.ico" SourceFile="!(wix.AVMWIcon)" />
+        </Shortcut>
+        <RegistryValue Root="HKCU" Key="Software\OpenSource\DeveloperToolsforUPnPTechnologies"  Type="integer" Value="2" KeyPath="yes"/>
+      </Component>
+
+      <Component Id="DeviceBuilderShortcut1" Guid="E510F3DA-82AA-11DF-8814-C00000000005">
+        <Shortcut Id="DeviceBuilderStartMenuShortcut"  Icon="DBIcon1.ico"
+                  Name="Device Builder"
+                  Description="Run Device Builder"
+                  Target="[APPLICATIONROOTDIRECTORY]Device Builder.exe"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" >
+        <Icon Id="DBIcon1.ico" SourceFile="!(wix.DBIcon)" />
+        </Shortcut>
+        <RegistryValue Root="HKCU" Key="Software\OpenSource\DeveloperToolsforUPnPTechnologies"  Type="integer" Value="2" KeyPath="yes"/>
+      </Component>
+
+      <Component Id="DeviceRelayShortcut1" Guid="E510F3DA-82AA-11DF-8814-C00000000006">
+        <Shortcut Id="DeviceRelayStartMenuShortcut"  Icon="DRIcon1.ico"
+                  Name="Device Relay"
+                  Description="Run Device Relay"
+                  Target="[APPLICATIONROOTDIRECTORY]Device Relay.exe"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" >
+        <Icon Id="DRIcon1.ico" SourceFile="!(wix.DRIcon)" />
+        </Shortcut>
+        <RegistryValue Root="HKCU" Key="Software\OpenSource\DeveloperToolsforUPnPTechnologies"  Type="integer" Value="2" KeyPath="yes"/>
+      </Component>
+
+      <Component Id="DeviceSnifferShortcut1" Guid="E510F3DA-82AA-11DF-8814-C00000000007">
+        <Shortcut Id="DeviceSnifferStartMenuShortcut"  Icon="DSIcon1.ico"
+                  Name="Device Sniffer"
+                  Description="Run Device Sniffer"
+                  Target="[APPLICATIONROOTDIRECTORY]Device Sniffer.exe"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" >
+        <Icon Id="DSIcon1.ico" SourceFile="!(wix.DSIcon)" />
+        </Shortcut>
+        <RegistryValue Root="HKCU" Key="Software\OpenSource\DeveloperToolsforUPnPTechnologies"  Type="integer" Value="2" KeyPath="yes"/>
+      </Component>
+
+      <Component Id="DeviceSpyShortcut1" Guid="E510F3DA-82AA-11DF-8814-C00000000009">
+        <Shortcut Id="DeviceSpyStartMenuShortcut"  Icon="DSpyIcon1.ico"
+                  Name="Device Spy"
+                  Description="Run Device Spy"
+                  Target="[APPLICATIONROOTDIRECTORY]Device Spy.exe"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" >
+        <Icon Id="DSpyIcon1.ico" SourceFile="!(wix.DSpyIcon)" />
+        </Shortcut>
+        <RegistryValue Root="HKCU" Key="Software\OpenSource\DeveloperToolsforUPnPTechnologies"  Type="integer" Value="2" KeyPath="yes"/>
+      </Component>
+
+      <Component Id="DeviceValidatorShortcut1" Guid="E510F3DA-82AA-11DF-8814-C00000000008">
+        <Shortcut Id="DeviceValidatorStartMenuShortcut"  Icon="DVIcon1.ico"
+                  Name="Device Validator"
+                  Description="Run Device Validator"
+                  Target="[APPLICATIONROOTDIRECTORY]Device Validator.exe"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" >
+        <Icon Id="DVIcon1.ico" SourceFile="!(wix.DVIcon)" />
+        </Shortcut>
+        <RegistryValue Root="HKCU" Key="Software\OpenSource\DeveloperToolsforUPnPTechnologies"  Type="integer" Value="2" KeyPath="yes"/>
+      </Component>
+
+      <Component Id="MediaRendererShortcut1" Guid="E510F3DA-82AA-11DF-8814-C00000000002">
+        <Shortcut Id="MediaRendererStartMenuShortcut"  Icon="AVMRIcon1.ico"
+                  Name="Media Renderer"
+                  Description="Run Media Renderer"
+                  Target="[APPLICATIONROOTDIRECTORY]Media Renderer.exe"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" >
+        <Icon Id="AVMRIcon1.ico" SourceFile="!(wix.AVMRIcon)" />
+        </Shortcut>
+        <RegistryValue Root="HKCU" Key="Software\OpenSource\DeveloperToolsforUPnPTechnologies"  Type="integer" Value="2" KeyPath="yes"/>
+      </Component>
+
+      <Component Id="NetworkLightShortcut1" Guid="E510F3DA-82AA-11DF-8814-C00000000010">
+        <Shortcut Id="NetworkLightStartMenuShortcut"  Icon="NLIcon1.ico"
+                  Name="Network Light"
+                  Description="Run Network Light"
+                  Target="[APPLICATIONROOTDIRECTORY]Network Light.exe"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" >
+        <Icon Id="NLIcon1.ico" SourceFile="!(wix.NLIcon)" />
+        </Shortcut>
+        <RegistryValue Root="HKCU" Key="Software\OpenSource\DeveloperToolsforUPnPTechnologies"  Type="integer" Value="2" KeyPath="yes"/>
+      </Component>
+
+      <Component Id="ServiceAuthorShortcut1" Guid="E510F3DA-82AA-11DF-8814-C00000000011">
+        <Shortcut Id="ServiceAuthorStartMenuShortcut"  Icon="SAIcon1.ico"
+                  Name="Service Author"
+                  Description="Run Service Author"
+                  Target="[APPLICATIONROOTDIRECTORY]Service Author.exe"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" >
+        <Icon Id="SAIcon1.ico" SourceFile="!(wix.SAIcon)" />
+        </Shortcut>
+        <RegistryValue Root="HKCU" Key="Software\OpenSource\DeveloperToolsforUPnPTechnologies"  Type="integer" Value="2" KeyPath="yes"/>
+      </Component>
+
+      <!--<Component Id="UninstallProductShortcut" Guid="E510F3DA-82AA-11DF-8814-C00000000012">
+          <Shortcut Id="UninstallProductStartMenuShortcut"  
+                    Name="Uninstall Developer Tools for UPnP Technologies"
+                    Description="Uninstalls Developer Tools for UPnP Technologies"
+                    Target="[SystemFolder]msiexec.exe"
+                    Arguments="/x [ProductCode]" />
+          --><!--Arguments="/x [ProductCode] /qf" />--><!--
+          --><!--uninstall with display option UI level=full UI--><!--
+          <RegistryValue Root="HKCU" Key="Software\OpenSource\DigitalHomeDeviceCodeWizard"  Type="integer" Value="2" KeyPath="yes"/>
+        </Component>-->
+
+      </DirectoryRef>
+
+
+    <DirectoryRef Id="DesktopFolder">
+      <!--  Add the shortcuts to the Desktop -->
+      <Component Id="AVMediaControllerShortcut2" Guid="E510F3DA-82AA-11DF-8814-C00000000013">
+        <Condition >INSTALLDESKTOPSHORTCUT = "1"</Condition>
+        <Shortcut Id="AVMediaControllerDesktopShortcut" Icon="AVMCIcon2.ico"
+                  Name="AV Media Controller"
+                  Description="Run AV Media Controller"
+                  Target="[APPLICATIONROOTDIRECTORY]AV Media Controller.exe"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" >
+          <Icon Id="AVMCIcon2.ico" SourceFile="!(wix.AVMCIcon)" />
+        </Shortcut>
+        <RemoveFolder Id="DesktopFolder" On="uninstall"/>
+        <RegistryValue Root="HKCU" Key="Software\OpenSource\DeveloperToolsforUPnPTechnologies"  Type="integer" Value="2" KeyPath="yes"/>
+      </Component>
+
+      <Component Id="AVMediaServerShortcut2" Guid="E510F3DA-82AA-11DF-8814-C00000000015">
+        <Condition >INSTALLDESKTOPSHORTCUT = "1"</Condition>
+        <Shortcut Id="AVMediaServerDesktopShortcut"  Icon="AVMSIcon2.ico"
+                  Name="AV Media Serverr"
+                  Description="Run AV Media Server"
+                  Target="[APPLICATIONROOTDIRECTORY]AV Media Server.exe"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" >
+          <Icon Id="AVMSIcon2.ico" SourceFile="!(wix.AVMSIcon)" />
+        </Shortcut>
+        <RegistryValue Root="HKCU" Key="Software\OpenSource\DeveloperToolsforUPnPTechnologies"  Type="integer" Value="2" KeyPath="yes"/>
+      </Component>
+
+      <Component Id="AVWizardShortcut2" Guid="E510F3DA-82AA-11DF-8814-C00000000016">
+        <Condition >INSTALLDESKTOPSHORTCUT = "1"</Condition>
+        <Shortcut Id="AVWizardDesktopShortcut"  Icon="AVMWIcon2.ico"
+                  Name="AV Media Wizard"
+                  Description="Run AV Media Wizard"
+                  Target="[APPLICATIONROOTDIRECTORY]AV Wizard.exe"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" >
+          <Icon Id="AVMWIcon2.ico" SourceFile="!(wix.AVMWIcon)" />
+        </Shortcut>
+        <RegistryValue Root="HKCU" Key="Software\OpenSource\DeveloperToolsforUPnPTechnologies"  Type="integer" Value="2" KeyPath="yes"/>
+      </Component>
+
+      <Component Id="DeviceBuilderShortcut2" Guid="E510F3DA-82AA-11DF-8814-C00000000017">
+        <Condition >INSTALLDESKTOPSHORTCUT = "1"</Condition>
+        <Shortcut Id="DeviceBuilderDesktopShortcut"  Icon="DBIcon2.ico"
+                  Name="Device Builder"
+                  Description="Run Device Builder"
+                  Target="[APPLICATIONROOTDIRECTORY]Device Builder.exe"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" >
+          <Icon Id="DBIcon2.ico" SourceFile="!(wix.DBIcon)" />
+        </Shortcut>
+        <RegistryValue Root="HKCU" Key="Software\OpenSource\DeveloperToolsforUPnPTechnologies"  Type="integer" Value="2" KeyPath="yes"/>
+      </Component>
+
+      <Component Id="DeviceRelayShortcut2" Guid="E510F3DA-82AA-11DF-8814-C00000000018">
+        <Condition >INSTALLDESKTOPSHORTCUT = "1"</Condition>
+        <Shortcut Id="DeviceRelayDesktopShortcut"  Icon="DRIcon2.ico"
+                  Name="Device Relay"
+                  Description="Run Device Relay"
+                  Target="[APPLICATIONROOTDIRECTORY]Device Relay.exe"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" >
+          <Icon Id="DRIcon2.ico" SourceFile="!(wix.DRIcon)" />
+        </Shortcut>
+        <RegistryValue Root="HKCU" Key="Software\OpenSource\DeveloperToolsforUPnPTechnologies"  Type="integer" Value="2" KeyPath="yes"/>
+      </Component>
+
+      <Component Id="DeviceSnifferShortcut2" Guid="E510F3DA-82AA-11DF-8814-C00000000019">
+        <Condition >INSTALLDESKTOPSHORTCUT = "1"</Condition>
+        <Shortcut Id="DeviceSnifferDesktopShortcut"  Icon="DSIcon2.ico"
+                  Name="Device Sniffer"
+                  Description="Run Device Sniffer"
+                  Target="[APPLICATIONROOTDIRECTORY]Device Sniffer.exe"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" >
+          <Icon Id="DSIcon2.ico" SourceFile="!(wix.DSIcon)" />
+        </Shortcut>
+        <RegistryValue Root="HKCU" Key="Software\OpenSource\DeveloperToolsforUPnPTechnologies"  Type="integer" Value="2" KeyPath="yes"/>
+      </Component>
+
+      <Component Id="DeviceSpyShortcut2" Guid="E510F3DA-82AA-11DF-8814-C00000000020">
+        <Condition >INSTALLDESKTOPSHORTCUT = "1"</Condition>
+        <Shortcut Id="DeviceSpyDesktopShortcut"  Icon="DSpyIcon2.ico"
+                  Name="Device Spy"
+                  Description="Run Device Spy"
+                  Target="[APPLICATIONROOTDIRECTORY]Device Spy.exe"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" >
+          <Icon Id="DSpyIcon2.ico" SourceFile="!(wix.DSpyIcon)" />
+        </Shortcut>
+        <RegistryValue Root="HKCU" Key="Software\OpenSource\DeveloperToolsforUPnPTechnologies"  Type="integer" Value="2" KeyPath="yes"/>
+      </Component>
+
+      <Component Id="DeviceValidatorShortcut2" Guid="E510F3DA-82AA-11DF-8814-C00000000021">
+        <Condition >INSTALLDESKTOPSHORTCUT = "1"</Condition>
+        <Shortcut Id="DeviceValidatoDesktopShortcut"  Icon="DVIcon2.ico"
+                  Name="Device Validator"
+                  Description="Run Device Validator"
+                  Target="[APPLICATIONROOTDIRECTORY]Device Validator.exe"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" >
+          <Icon Id="DVIcon2.ico" SourceFile="!(wix.DVIcon)" />
+        </Shortcut>
+        <RegistryValue Root="HKCU" Key="Software\OpenSource\DeveloperToolsforUPnPTechnologies"  Type="integer" Value="2" KeyPath="yes"/>
+      </Component>
+
+      <Component Id="MediaRendererShortcut2" Guid="E510F3DA-82AA-11DF-8814-C00000000014">
+        <Condition >INSTALLDESKTOPSHORTCUT = "1"</Condition>
+        <Shortcut Id="MediaRendererDesktopShortcut"  Icon="AVMRIcon2.ico"
+                  Name="AV Media Renderer"
+                  Description="Run AV Media Renderer"
+                  Target="[APPLICATIONROOTDIRECTORY]Media Renderer.exe"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" >
+          <Icon Id="AVMRIcon2.ico" SourceFile="!(wix.AVMRIcon)" />
+        </Shortcut>
+        <RegistryValue Root="HKCU" Key="Software\OpenSource\DeveloperToolsforUPnPTechnologies"  Type="integer" Value="2" KeyPath="yes"/>
+      </Component>
+
+      <Component Id="NetworkLightShortcut2" Guid="E510F3DA-82AA-11DF-8814-C00000000022">
+        <Condition >INSTALLDESKTOPSHORTCUT = "1"</Condition>
+        <Shortcut Id="NetworkLightDesktopShortcut"  Icon="NLIcon2.ico"
+                  Name="Network Light"
+                  Description="Run Network Light"
+                  Target="[APPLICATIONROOTDIRECTORY]Network Light.exe"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" >
+          <Icon Id="NLIcon2.ico" SourceFile="!(wix.NLIcon)" />
+        </Shortcut>
+        <RegistryValue Root="HKCU" Key="Software\OpenSource\DeveloperToolsforUPnPTechnologies"  Type="integer" Value="2" KeyPath="yes"/>
+      </Component>
+
+      <Component Id="ServiceAuthorShortcut2" Guid="E510F3DA-82AA-11DF-8814-C00000000023">
+        <Condition >INSTALLDESKTOPSHORTCUT = "1"</Condition>
+        <Shortcut Id="ServiceAuthorDesktopShortcut"  Icon="SAIcon2.ico"
+                  Name="Service Author"
+                  Description="Run Service Author"
+                  Target="[APPLICATIONROOTDIRECTORY]Service Author.exe"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" >
+        <Icon Id="SAIcon2.ico" SourceFile="!(wix.SAIcon)" />
+        </Shortcut>
+        <RegistryValue Root="HKCU" Key="Software\OpenSource\DeveloperToolsforUPnPTechnologies"  Type="integer" Value="2" KeyPath="yes"/>
+      </Component>
+
+    </DirectoryRef>
+
+  </Fragment>
+</Wix>

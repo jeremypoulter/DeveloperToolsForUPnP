@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <ComponentGroup Id="DeviceBuilderFilesGroup"  >
+      <Component Id="DeviceBuilderFiles" Guid="*" Directory="TEMPFILESDIRECTORY">
+        <File Id="DeviceBuilderFilesEXE" Name="DeviceBuilderFiles.exe" DiskId="1" Source="!(wix.ZipFile)"   Vital="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

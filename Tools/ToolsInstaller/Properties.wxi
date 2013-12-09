@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include>
+  <Icon Id="InstallerIcon" SourceFile="installer.ico" />
+  <Property Id="MSIFASTINSTALL" Value="3" />
+  <Property Id="ASSISTANCE_USERS">cur</Property>
+  <!-- cur or all -->
+
+  <!--User entered parameter Properties-->
+  <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONROOTDIRECTORY" Secure="yes" />
+  <Property Id="WIXUI_TEMPDIR" Value="TEMPFILESDIRECTORY" Secure="yes" />
+  <Property Id="INSTALL_LOG_FILE" Value="C:\"  Secure="yes" />
+  <Property Id="INSTALL_VERSION" Value="$(var.ProductVersion)" Secure="yes" />
+
+  <!--Installer Properties-->
+  <Property Id="ALLUSERS" Value="1" Secure="yes" />
+  <Property Id="ARPPRODUCTICON" Value="InstallerIcon" />
+  <Property Id="ARPINSTALLLOCATION" Value="C:\" Secure="yes" />
+
+  <Property Id="WIXUI_EXITDIALOGOPTIONALTEXT" Value="Click 'Finish' to exit." />
+  <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch Intel System Defense Utility"  />
+
+  <!--UI Properties-->
+  <WixVariable Id="WixUIBannerBmp" Value="installer.bmp" />
+  <WixVariable Id="LicenseRTFFile" Value="license.rtf" />
+
+  <!--Product Paths-->
+  <?define AVMCPath = "..\MediaController\bin\"?>
+  <?define AVMSPath = "..\MediaServer\UPnPMediaServer\bin\"?>
+  <?define AVMWPath = "..\MediaWizard\bin\"?>
+  <?define AVMSCPath = "..\MediaServer\UPnPMediaServerCore\bin\"?>
+  <?define AVMRPath = "..\MediaRenderer\bin\"?>
+  <?define DBPath = "..\DeviceBuilder\bin\"?>
+  <?define DRPath = "..\DeviceRelay\bin\"?>
+  <?define DSPath = "..\DeviceSniffer\bin\"?>
+  <?define DSpyPath = "..\DeviceSpy\bin\"?>
+  <?define DVPath = "..\DeviceValidator\bin\"?>
+  <?define AUTPath = "..\..\..\CommonComponents\AutoUpdateTool\bin\"?>
+  <?define MPath = "..\..\Global\MetaData\bin\"?>
+  <?define NLPath = "..\NetworkLight\bin\"?>
+  <?define SAPath = "..\ServiceAuthor\bin\"?>
+  <?define UPnPPath = "..\..\Global\UPnP\bin\"?>
+  <?define UPnPAVPath = "..\..\Global\UPNP_AV\bin\"?>
+  <?define UPnPAV_DRSPath = "..\..\Global\UPNPAV_DeviceRendererStack\bin\"?>
+  <?define UPnPAV_RSPath = "..\..\Global\UPNPAV_RendererStack\bin\"?>
+  <?define UPnPAVCDSMLPath = "..\..\Global\UPNPAVCDSML\bin\"?>
+  <?define UPnPAVMSCPPath = "..\..\Global\UPNPAVMSCP\bin\"?>
+  <?define UPnPAVMSDVPath = "..\..\Global\UPNPAVMSDV\bin\"?>
+  <?define DVPIPath = "..\..\Global\ValidatorInterfaces\bin\"?>
+  <WixVariable Id="FileHashPath" Value="..\..\Global\FileHash\bin\"  />
+  <WixVariable Id="WMPPath" Value="[WindowsSystem32]"   />
+
+  <!--Icons-->
+  <WixVariable Id="AVMCIcon" Value="..\MediaController\UPnpMediaController.ico"   />
+  <WixVariable Id="AVMSIcon" Value="..\MediaServer\UPnPMediaServer\AVMediaServer.ico"   />
+  <WixVariable Id="AVMWIcon" Value="..\MediaWizard\AVMediaWizard.ico"   />
+  <WixVariable Id="DBIcon" Value="..\DeviceBuilder\UPnPStackBuilder.ico"   />
+  <WixVariable Id="DRIcon" Value="..\DeviceRelay\UPnPRelay.ico"   />
+  <WixVariable Id="DSIcon" Value="..\DeviceSniffer\UPnPSniffer.ico"   />
+  <WixVariable Id="DSpyIcon" Value="..\DeviceSpy\DeviceSpy.ico"   />
+  <WixVariable Id="DVIcon" Value="..\DeviceValidator\UPnPValidator.ico"   />
+  <WixVariable Id="AVMRIcon" Value="..\MediaRenderer\MediaRenderer.ico"   />
+  <WixVariable Id="NLIcon" Value="..\NetworkLight\NetworkLight.ico"   />
+  <WixVariable Id="SAIcon" Value="..\ServiceAuthor\UPnPAuthor.ico"   />
+
+  <!--Component Files-->
+  <WixVariable Id="AVMCExecutable" Value="$(var.AVMCPath)$(var.AVMediaController.Configuration)\AV Media Controller.exe"   />
+  <WixVariable Id="AVMCDebug" Value="$(var.AVMCPath)$(var.AVMediaController.Configuration)\AV Media Controller.pdb"   />
+
+  <WixVariable Id="AVMSExecutable" Value="$(var.AVMSPath)$(var.AVMediaServer.Configuration)\AV Media Server.exe"   />
+  <WixVariable Id="AVMSDebug" Value="$(var.AVMSPath)$(var.AVMediaServer.Configuration)\AV Media Server.pdb"   />
+
+  <WixVariable Id="AVMWExecutable" Value="$(var.AVMWPath)$(var.AVMediaWizard.Configuration)\AV Wizard.exe"   />
+  <WixVariable Id="AVMWDebug" Value="$(var.AVMWPath)$(var.AVMediaWizard.Configuration)\AV Wizard.pdb"   />
+
+  <WixVariable Id="AVMSCExecutable" Value="$(var.AVMSCPath)$(var.UPnPMediaServerCore.Configuration)\AVMediaServerCore.dll"   />
+  <WixVariable Id="AVMSCDebug" Value="$(var.AVMSCPath)$(var.UPnPMediaServerCore.Configuration)\AVMediaServerCore.pdb"   />
+
+  <WixVariable Id="DBExecutable" Value="$(var.DBPath)$(var.DeviceBuilder.Configuration)\Device Builder.exe"   />
+  <WixVariable Id="DBDebug" Value="$(var.DBPath)$(var.DeviceBuilder.Configuration)\Device Builder.pdb"   />
+
+  <WixVariable Id="DRExecutable" Value="$(var.DRPath)$(var.DeviceRelay.Configuration)\Device Relay.exe"   />
+  <WixVariable Id="DRDebug" Value="$(var.DRPath)$(var.DeviceRelay.Configuration)\Device Relay.pdb"   />
+
+  <WixVariable Id="DSExecutable" Value="$(var.DSPath)$(var.DeviceSniffer.Configuration)\Device Sniffer.exe"   />
+  <WixVariable Id="DSDebug" Value="$(var.DSPath)$(var.DeviceSniffer.Configuration)\Device Sniffer.pdb"   />
+
+  <WixVariable Id="DSpyExecutable" Value="$(var.DSpyPath)$(var.DeviceSpy.Configuration)\Device Spy.exe"   />
+  <WixVariable Id="DSpyDebug" Value="$(var.DSpyPath)$(var.DeviceSpy.Configuration)\Device Spy.pdb"   />
+
+  <WixVariable Id="DVExecutable" Value="$(var.DVPath)$(var.DeviceValidator.Configuration)\Device Validator.exe"   />
+  <WixVariable Id="DVDebug" Value="$(var.DVPath)$(var.DeviceValidator.Configuration)\Device Validator.pdb"   />
+
+  <WixVariable Id="AUTExecutable" Value="$(var.AUTPath)$(var.AutoUpdateTool.Configuration)\AutoUpdateTool.exe"   />
+  <WixVariable Id="AUTDebug" Value="$(var.AUTPath)$(var.AutoUpdateTool.Configuration)\AutoUpdateTool.pdb"   />
+  <WixVariable Id="AUTConfig" Value="$(var.AUTPath)$(var.AutoUpdateTool.Configuration)\AutoUpdateTool.exe.config"   />
+  <WixVariable Id="IWIExecutable" Value="$(var.AUTPath)$(var.AutoUpdateTool.Configuration)\Interop.WindowsInstaller.dll"   />
+
+  <WixVariable Id="AVMRExecutable" Value="$(var.AVMRPath)$(var.AVMediaRenderer.Configuration)\Media Renderer.exe"   />
+  <WixVariable Id="AVMRDebug" Value="$(var.AVMRPath)$(var.AVMediaRenderer.Configuration)\Media Renderer.pdb"   />
+  <WixVariable Id="IWMPLExecutable" Value="$(var.AVMRPath)$(var.AVMediaRenderer.Configuration)\Interop.WMPLib.dll"   />
+  <WixVariable Id="AIWMPLExecutable" Value="$(var.AVMRPath)$(var.AVMediaRenderer.Configuration)\AxInterop.WMPLib.dll"   />
+  <WixVariable Id="AIWMPLDebug" Value="$(var.AVMRPath)$(var.AVMediaRenderer.Configuration)\AxInterop.WMPLib.pdb"   />
+
+  <WixVariable Id="MExecutable" Value="$(var.MPath)$(var.Metadata.Configuration)\MetaData.dll"   />
+  <WixVariable Id="MDebug" Value="$(var.MPath)$(var.Metadata.Configuration)\MetaData.pdb"   />
+
+  <WixVariable Id="NLExecutable" Value="$(var.NLPath)$(var.NetworkLight.Configuration)\Network Light.exe"   />
+  <WixVariable Id="NLDebug" Value="$(var.NLPath)$(var.NetworkLight.Configuration)\Network Light.pdb"   />
+
+  <WixVariable Id="SAExecutable" Value="$(var.SAPath)$(var.ServiceAuthor.Configuration)\Service Author.exe"   />
+  <WixVariable Id="SADebug" Value="$(var.SAPath)$(var.ServiceAuthor.Configuration)\Service Author.pdb"   />
+
+  <WixVariable Id="UPnPExecutable" Value="$(var.UPnPPath)$(var.UPnP.Configuration)\UPnP.dll"   />
+  <WixVariable Id="UPnPDebug" Value="$(var.UPnPPath)$(var.UPnP.Configuration)\UPnP.pdb"   />
+
+  <WixVariable Id="UPnPAVExecutable" Value="$(var.UPnPAVPath)$(var.UPnPAV.Configuration)\UPNP_AV.dll"   />
+  <WixVariable Id="UPnPAVDebug" Value="$(var.UPnPAVPath)$(var.UPnPAV.Configuration)\UPNP_AV.pdb"   />
+
+  <WixVariable Id="UPnPAV_DRSExecutable" Value="$(var.UPnPAV_DRSPath)$(var.UPnPAV_DeviceRendererStack.Configuration)\UPNPAV_DeviceRendererStack.dll"   />
+  <WixVariable Id="UPnPAV_DRSDebug" Value="$(var.UPnPAV_DRSPath)$(var.UPnPAV_DeviceRendererStack.Configuration)\UPNPAV_DeviceRendererStack.pdb"   />
+
+  <WixVariable Id="UPnPAV_RSExecutable" Value="$(var.UPnPAV_RSPath)$(var.UPnPAV_RendererStack.Configuration)\UPNPAV_RendererStack.dll"   />
+  <WixVariable Id="UPnPAV_RSDebug" Value="$(var.UPnPAV_RSPath)$(var.UPnPAV_RendererStack.Configuration)\UPNPAV_RendererStack.pdb"   />
+
+  <WixVariable Id="UPnPAVCDSMLExecutable" Value="$(var.UPnPAVCDSMLPath)$(var.UPnPAVCDSML.Configuration)\UPNPAVCDSML.dll"   />
+  <WixVariable Id="UPnPAVCDSMLDebug" Value="$(var.UPnPAVCDSMLPath)$(var.UPnPAVCDSML.Configuration)\UPNPAVCDSML.pdb"   />
+
+  <WixVariable Id="UPnPAVMSCPExecutable" Value="$(var.UPnPAVMSCPPath)$(var.UPnPAVMSCP.Configuration)\UPNPAVMSCP.dll"   />
+  <WixVariable Id="UPnPAVMSCPDebug" Value="$(var.UPnPAVMSCPPath)$(var.UPnPAVMSCP.Configuration)\UPNPAVMSCP.pdb"   />
+
+  <WixVariable Id="UPnPAVMSDVExecutable" Value="$(var.UPnPAVMSDVPath)$(var.UPnPAVMSDV.Configuration)\UPNPAVMSDV.dll"   />
+  <WixVariable Id="UPnPAVMSDVDebug" Value="$(var.UPnPAVMSDVPath)$(var.UPnPAVMSDV.Configuration)\UPNPAVMSDV.pdb"   />
+
+  <WixVariable Id="DVPIExecutable" Value="$(var.DVPIPath)$(var.DeviceValidatorPluginInterfaces.Configuration)\ValidatorInterfaces.dll"   />
+  <WixVariable Id="DVPIDebug" Value="$(var.DVPIPath)$(var.DeviceValidatorPluginInterfaces.Configuration)\ValidatorInterfaces.pdb"   />
+
+  
+  <!--Other installer source resources paths-->
+  <WixVariable Id="ImagesPath" Value="Images\"  />
+  <WixVariable Id="ZipFile" Value="..\DeviceBuilder\DeviceBuilderFiles.exe"  />
+
+  <!--Properties for use in the deferred custom actions-->
+  <Property Id="LaunchBeforeInstall"   Value="1" />
+  <Property Id="LaunchCommit"   Value="1" />
+  
+</Include>

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Fragment>
+    <ComponentGroup Id="DeveloperToolsforUPnPTechnologiesGroup"  >
+      <Component Id="AUT" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="AUTEXE" Name="AutoUpdateTool.exe" DiskId="1" Source="!(wix.AUTExecutable)"  Vital="yes">
+        </File>
+      </Component>
+      <Component Id="AUTDebug" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="AUTPDB" Name="AutoUpdateTool.pdb" DiskId="1" Source="!(wix.AUTDebug)"  Vital="yes">
+        </File>
+      </Component>
+      <Component Id="AUTConfig" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="AUTEXECONFIG" Name="AutoUpdateTool.exe.config" DiskId="1" Source="!(wix.AUTConfig)"  Vital="yes">
+        </File>
+      </Component>
+      <Component Id="AVMC" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="AVMCEXE" Name="AV Media Controller.exe" DiskId="1" Source="!(wix.AVMCExecutable)"  Vital="yes">
+        </File>
+      </Component>
+      <Component Id="AVMCDebug" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="AVMCPDB" Name="AV Media Controller.pdb" DiskId="1" Source="!(wix.AVMCDebug)"  Vital="yes">
+        </File>
+      </Component>
+      <Component Id="AVMS" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="AVMSEXE" Name="AV Media Server.exe" DiskId="1" Source="!(wix.AVMSExecutable)"  Vital="yes">        </File>
+      </Component>
+      <Component Id="AVMSDebug" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="AVMSPDB" Name="AV Media Server.pdb" DiskId="1" Source="!(wix.AVMSDebug)"  Vital="yes">        </File>
+      </Component>
+      <Component Id="AVMW" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="AVMWEXE" Name="AV Wizard.exe" DiskId="1" Source="!(wix.AVMWExecutable)"  Vital="yes">
+        </File>
+      </Component>
+      <Component Id="AVMWDebug" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="AVMWPDB" Name="AV Wizard.pdb" DiskId="1" Source="!(wix.AVMWDebug)"  Vital="yes">
+        </File>
+      </Component>
+      <Component Id="AVMSC" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="AVMSCDLL" Name="AVMediaServerCore.dll" DiskId="1" Source="!(wix.AVMSCExecutable)"  Vital="yes">
+        </File>
+      </Component>
+      <Component Id="AVMSCDebug" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="AVMSCPDB" Name="AVMediaServerCore.pdb" DiskId="1" Source="!(wix.AVMSCDebug)"  Vital="yes">
+        </File>
+      </Component>
+      <Component Id="AIWMPL" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="AIWMPLDLL" Name="AxInterop.WMPLib.dll" DiskId="1" Source="!(wix.AIWMPLExecutable)"  Vital="yes">
+        </File>
+      </Component>
+      <Component Id="DB" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="DBEXE" Name="Device Builder.exe" DiskId="1" Source="!(wix.DBExecutable)"  Vital="yes">
+        </File>
+      </Component>
+      <Component Id="DBDebug" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="DBPDB" Name="Device Builder.pdb" DiskId="1" Source="!(wix.DBDebug)"  Vital="yes">
+        </File>
+      </Component>
+      <Component Id="DR" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="DREXE" Name="Device Relay.exe" DiskId="1" Source="!(wix.DRExecutable)"  Vital="yes">
+        </File>
+      </Component>
+      <Component Id="DRDebug" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="DRPDB" Name="Device Relay.pdb" DiskId="1" Source="!(wix.DRDebug)"  Vital="yes">
+        </File>
+      </Component>
+      <Component Id="DS" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="DSEXE" Name="Device Sniffer.exe" DiskId="1" Source="!(wix.DSExecutable)"  Vital="yes">
+        </File>
+      </Component>
+      <Component Id="DSDebug" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="DSPDB" Name="Device Sniffer.pdb" DiskId="1" Source="!(wix.DSDebug)"  Vital="yes">
+        </File>
+      </Component>
+      <Component Id="DSpy" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="DSpyEXE" Name="Device Spy.exe" DiskId="1" Source="!(wix.DSpyExecutable)"  Vital="yes">
+        </File>
+      </Component>
+      <Component Id="DSpyDebug" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="DSpyPDB" Name="Device Spy.pdb" DiskId="1" Source="!(wix.DSpyDebug)"  Vital="yes">
+        </File>
+      </Component>
+      <Component Id="DV" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="DVEXE" Name="Device Validator.exe" DiskId="1" Source="!(wix.DVExecutable)"  Vital="yes">
+        </File>
+      </Component>
+      <Component Id="DVDebug" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="DVPDB" Name="Device Validator.pdb" DiskId="1" Source="!(wix.DVDebug)" Vital="yes">
+        </File>
+      </Component>
+      <Component Id="IWI" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="IWIDLL" Name="Interop.WindowsInstaller.dll" DiskId="1" Source="!(wix.IWIExecutable)" Vital="yes">
+        </File>
+      </Component>
+      <Component Id="AVMR" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="AVMREXE" Name="Media Renderer.exe" DiskId="1" Source="!(wix.AVMRExecutable)" Vital="yes">
+        </File>
+      </Component>
+      <Component Id="AVMRDebug" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="AVMRPDB" Name="Media Renderer.pdb" DiskId="1" Source="!(wix.AVMRDebug)" Vital="yes">
+        </File>
+      </Component>
+      <Component Id="IWMPL" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="IWMPLDLL" Name="Interop.WMPLib.dll" DiskId="1" Source="!(wix.IWMPLExecutable)" Vital="yes">
+        </File>
+      </Component>
+      <Component Id="M" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="MDLL" Name="MetaData.dll" DiskId="1" Source="!(wix.MExecutable)" Vital="yes">
+        </File>
+      </Component>
+      <Component Id="MDebug" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="MPDB" Name="MetaData.pdb" DiskId="1" Source="!(wix.MDebug)" Vital="yes">
+        </File>
+      </Component>
+      <Component Id="NL" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="NLEXE" Name="Network Light.exe" DiskId="1" Source="!(wix.NLExecutable)" Vital="yes">
+        </File>
+      </Component>
+      <Component Id="NLDebug" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="NLPDB" Name="Network Light.pdb" DiskId="1" Source="!(wix.NLDebug)" Vital="yes">
+        </File>
+      </Component>
+      <Component Id="SA" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="SAEXE" Name="Service Author.exe" DiskId="1" Source="!(wix.SAExecutable)" Vital="yes">
+        </File>
+      </Component>
+      <Component Id="SADebug" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="SAPDB" Name="Service Author.pdb" DiskId="1" Source="!(wix.SADebug)" Vital="yes">
+        </File>
+      </Component>
+      <Component Id="UpdateInfo" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="UpdateInfoINI" Name="UpdateInfo.ini" DiskId="1" Source="UpdateInfo-CompleteDevTools.ini" Vital="yes">
+        </File>
+      </Component>
+      <Component Id="UpdateInfo2" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="UpdateInfoINI2" Name="UpdateInfo2.ini" DiskId="1" Source="UpdateInfo-CompleteDevTools.ini" Vital="yes">
+        </File>
+      </Component>
+      <Component Id="UPnP" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="UPnPDLL" Name="UPnP.dll" DiskId="1" Source="!(wix.UPnPExecutable)" Vital="yes">
+        </File>
+      </Component>
+      <Component Id="UPnPDebug" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="UPnPPDB" Name="UPnP.pdb" DiskId="1" Source="!(wix.UPnPDebug)" Vital="yes">
+        </File>
+      </Component>
+      <Component Id="UPNPAV" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="UPNPAVDLL" Name="UPNP_AV.dll" DiskId="1" Source="!(wix.UPnPAVExecutable)" Vital="yes">
+        </File>
+      </Component>
+      <Component Id="UPNPAVDebug" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="UPNPAVPDB" Name="UPNP_AV.pdb" DiskId="1" Source="!(wix.UPnPAVDebug)" Vital="yes">
+        </File>
+      </Component>
+      <Component Id="UPnPAV_DRS" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="UPnPAV_DRSDLL" Name="UPNPAV_DeviceRendererStack.dll" DiskId="1" Source="!(wix.UPnPAV_DRSExecutable)" Vital="yes">
+        </File>
+      </Component>
+      <Component Id="UPnPAV_DRSDebug" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="UPnPAV_DRSPDB" Name="UPNPAV_DeviceRendererStack.pdb" DiskId="1" Source="!(wix.UPnPAV_DRSDebug)" Vital="yes">
+        </File>
+      </Component>
+      <Component Id="UPnPAV_RS" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="UPnPAV_RSDLL" Name="UPNPAV_RendererStack.dll" DiskId="1" Source="!(wix.UPnPAV_RSExecutable)" Vital="yes">
+        </File>
+      </Component>
+      <Component Id="UPnPAV_RSDebug" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="UPnPAV_RSPDB" Name="UPNPAV_RendererStack.pdb" DiskId="1" Source="!(wix.UPnPAV_RSDebug)" Vital="yes">
+        </File>
+      </Component>
+      <Component Id="UPNPAVCDSML" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="UPNPAVCDSMLDLL" Name="UPNPAVCDSML.dll" DiskId="1" Source="!(wix.UPnPAVCDSMLExecutable)" Vital="yes">
+        </File>
+      </Component>
+      <Component Id="UPNPAVCDSMLDebug" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="UPNPAVCDSMLPDB" Name="UPNPAVCDSML.pdb" DiskId="1" Source="!(wix.UPnPAVCDSMLDebug)" Vital="yes">
+        </File>
+      </Component>
+      <Component Id="UPNPAVMSCP" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="UPNPAVMSCPDLL" Name="UPNPAVMSCP.dll" DiskId="1" Source="!(wix.UPnPAVMSCPExecutable)" Vital="yes">
+        </File>
+      </Component>
+      <Component Id="UPNPAVMSCPDebug" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="UPNPAVMSCPPDB" Name="UPNPAVMSCP.pdb" DiskId="1" Source="!(wix.UPnPAVMSCPDebug)"  Vital="yes">
+        </File>
+      </Component>
+      <Component Id="UPNPAVMSDV" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="UPNPAVMSDVDLL" Name="UPNPAVMSDV.dll" DiskId="1" Source="!(wix.UPnPAVMSDVExecutable)"  Vital="yes">
+        </File>
+      </Component>
+      <Component Id="UPNPAVMSDVDebug" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="UPNPAVMSDVPDB" Name="UPNPAVMSDV.pdb" DiskId="1" Source="!(wix.UPnPAVMSDVDebug)"  Vital="yes">
+        </File>
+      </Component>
+      <Component Id="DVPI" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="DVPIDLL" Name="ValidatorInterfaces.dll" DiskId="1" Source="!(wix.DVPIExecutable)"  Vital="yes">
+        </File>
+      </Component>
+      <Component Id="DVPIDebug" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="DVPIPDB" Name="ValidatorInterfaces.pdb" DiskId="1" Source="!(wix.DVPIDebug)"  Vital="yes">
+        </File>
+      </Component>
+      <!--<Component Id="wmp" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="wmpDLL" Name="wmp.dll" DiskId="1" Source="$(var.Win64)wmp.dll"  Vital="yes">
+        </File>
+      </Component>-->
+    </ComponentGroup>	
+  </Fragment>
+</Wix>

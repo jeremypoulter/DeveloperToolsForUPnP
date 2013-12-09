@@ -1,0 +1,124 @@
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension" xmlns:sql="http://schemas.microsoft.com/wix/SqlExtension">
+  <?define UpgradeCode = "25EF6E49-9351-4FAD-BCD0-07E743403CFF"?>
+  <?define ProductName = "Developer Tools for UPnP Technologies"?>
+  <?define Manufacturer = "Open Source"?>
+  <?define ProductVersion = "0.0.67"?>
+  <?define ProductCode = "0F7ACD8E-66FC-4C14-90B4-9C457CC73D6D"?>
+  <!-- Don't forget to change the product code when changing the version number! -->
+
+  <Product Id="$(var.ProductCode)"
+           Name="$(var.ProductName)"
+           Language="1033"
+           Codepage="1252"
+           Version="$(var.ProductVersion)"
+           Manufacturer="$(var.Manufacturer)"
+           UpgradeCode="$(var.UpgradeCode)">
+    <Package Id="*"
+             Description="Developer Tools for UPnP Technologies"
+             Comments="v$(var.ProductVersion), http://opentools.homeip.net"
+             InstallerVersion="200"
+             Compressed="yes"
+             Languages="1033"
+             SummaryCodepage="1252"
+             Keywords="Installer" />
+
+    <Upgrade Id="$(var.UpgradeCode)">
+      <UpgradeVersion OnlyDetect="yes" Property="SAME_VERSION_FOUND"
+        Minimum="$(var.ProductVersion)" IncludeMinimum="yes"
+        Maximum="$(var.ProductVersion)" IncludeMaximum="yes" />
+      <UpgradeVersion OnlyDetect="yes" Property="LATER_VERSION_FOUND"
+        Minimum="$(var.ProductVersion)" IncludeMinimum="no" />
+      <UpgradeVersion OnlyDetect="no" Property="EARLIER_VERSION_FOUND"
+        Minimum="0.0.0" IncludeMinimum="yes"
+        Maximum="$(var.ProductVersion)" IncludeMaximum="no" />
+    </Upgrade>
+
+    <Property Id="MSIUSEREALADMINDETECTION" Value="1" />
+    <Media Id="1" Cabinet="Product.cab" EmbedCab="yes" CompressionLevel="high"  />
+
+    <!-- Define the directory structure -->
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramMenuFolder" Name="PMFFiles" >
+        <Directory Id="APPLICATIONSHORTCUTDIRECTORY" Name="Developer Tools for UPnP™ Technology"  />
+      </Directory>
+      <Directory Id="DesktopFolder" Name="DTFiles" />
+      <Directory Id="ProgramFilesFolder">
+        <!--<Directory Id="ProgramFiles64Folder">-->
+        <Directory Id="MANUFACTURERROOTDIRECTORY" Name="Open Source">
+          <Directory Id="APPLICATIONROOTDIRECTORY" Name="Developer Tools for UPnP Technologies">
+            <Directory Id="TEMPFILESDIRECTORY" Name="TEMP FILES">
+            </Directory>
+          </Directory>
+        </Directory>
+      </Directory>
+      <Directory Id="WindowsFolder" Name="Windows" />
+        <Directory Id="WindowsSystem32" Name="System32" />
+    </Directory>
+
+    <!-- Define the installation components -->
+    <ComponentGroup Id="ServerProducts"  >
+      <ComponentGroupRef Id="DeveloperToolsforUPnPTechnologiesGroup" />
+    </ComponentGroup>
+
+    <!-- Tell WiX to install the files -->
+    <Feature Id="ProductFeatures" Title="Intel System Defense Utility Application" Level="1">
+      <ComponentGroupRef Id="ServerProducts" />
+      <ComponentGroupRef Id="DeviceBuilderFilesGroup" />
+      <ComponentRef Id="AVMediaControllerShortcut1" />
+      <ComponentRef Id="AVMediaControllerShortcut2" />
+      <ComponentRef Id="AVMediaServerShortcut1" />
+      <ComponentRef Id="AVMediaServerShortcut2" />
+      <ComponentRef Id="AVWizardShortcut1" />
+      <ComponentRef Id="AVWizardShortcut2" />
+      <ComponentRef Id="DeviceBuilderShortcut1" />
+      <ComponentRef Id="DeviceBuilderShortcut2" />
+      <ComponentRef Id="DeviceRelayShortcut1" />
+      <ComponentRef Id="DeviceRelayShortcut2" />
+      <ComponentRef Id="DeviceSnifferShortcut1" />
+      <ComponentRef Id="DeviceSnifferShortcut2" />
+      <ComponentRef Id="DeviceSpyShortcut1" />
+      <ComponentRef Id="DeviceSpyShortcut2" />
+      <ComponentRef Id="DeviceValidatorShortcut1" />
+      <ComponentRef Id="DeviceValidatorShortcut2" />
+      <ComponentRef Id="MediaRendererShortcut1" />
+      <ComponentRef Id="MediaRendererShortcut2" />
+      <ComponentRef Id="NetworkLightShortcut1" />
+      <ComponentRef Id="NetworkLightShortcut2" />
+      <ComponentRef Id="ServiceAuthorShortcut1" />
+      <ComponentRef Id="ServiceAuthorShortcut2" />
+      <!--<ComponentRef Id="UninstallProductShortcut" />-->
+    </Feature>
+
+    <!-- Define the UI -->
+    <UI>
+      <UIRef Id="MyWixUI_InstallDir" />
+    </UI>
+
+    <Binary Id="CustomAction" SourceFile="..\..\..\Installer Custom Actions\bin\Debug\InstallerCustomActions.CA.dll" />
+
+    <CustomAction Id="AlreadyUpdated" Error="[ProductName] has already been updated to latest version." />
+    <CustomAction Id="NoDowngrade"  Error="A later version of [ProductName] is already installed." />
+
+
+    <CustomAction Id="LaunchGetPreviousInstallInfo" BinaryKey="CustomAction" DllEntry="CAGetPreviousInstallInfo" Return="check" Execute="immediate"  HideTarget="no" Impersonate="no" />
+    <CustomAction Id="LaunchSetPropertyValues" BinaryKey="CustomAction" DllEntry="CASetPropertyValues" Return="check" Execute="immediate"  HideTarget="no" Impersonate="no" />
+    <CustomAction Id="LaunchCommit" BinaryKey="CustomAction" DllEntry="CACommit" Execute="commit" Return="check" HideTarget="no" Impersonate="no" ></CustomAction>
+    <CustomAction Id="LaunchPostUninstall" BinaryKey="CustomAction" DllEntry="CAPostUninstall" Execute="deferred" Return="check" HideTarget="no" Impersonate="no" ></CustomAction>
+    <CustomAction Id="ExecuteExtractFiles" FileKey="DeviceBuilderFilesEXE" ExeCommand='-s -d"[APPLICATIONROOTDIRECTORY]"' Execute="deferred" Return="check" HideTarget="no" Impersonate="no" ></CustomAction>
+
+    <InstallExecuteSequence>
+      <Custom Action="LaunchGetPreviousInstallInfo" Before="FindRelatedProducts"></Custom>
+      <Custom Action="AlreadyUpdated" After="FindRelatedProducts">NOT (SAME_VERSION_FOUND = "")</Custom>
+      <Custom Action="NoDowngrade" After="FindRelatedProducts">NOT (LATER_VERSION_FOUND = "")</Custom>
+      <RemoveExistingProducts After="InstallInitialize">NOT (EARLIER_VERSION_FOUND = "")</RemoveExistingProducts>
+      <Custom Action="LaunchSetPropertyValues" Before="InstallFiles"></Custom>
+      <Custom Action="ExecuteExtractFiles" After="InstallFiles">(NOT INSTALLED) AND (NOT REMOVE="ALL")</Custom>
+      <Custom Action="LaunchCommit" After="ExecuteExtractFiles">(NOT INSTALLED) AND (NOT REMOVE="ALL")</Custom>
+      <Custom Action="LaunchPostUninstall" Before="InstallFinalize">(NOT UPGRADINGPRODUCTCODE) AND (REMOVE="ALL")</Custom>
+    </InstallExecuteSequence>
+
+    <!--Global properties include effecting installation behaviors-->
+    <?include Properties.wxi ?>
+
+  </Product>
+</Wix>
