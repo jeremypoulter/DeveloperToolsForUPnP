@@ -47,6 +47,38 @@ namespace OpenSource.UPnP
         }
     }
 
+    public sealed class IconInfo
+    {
+      Uri _uri;
+      int _width;
+      int _height;
+      string _mimeType;
+
+      public IconInfo(Uri uri, int width, int height, string mimeType)
+      {
+        _uri = uri;
+        _width = width;
+        _height = height;
+        _mimeType = mimeType;
+      }
+
+      public System.Uri Uri
+      {
+        get { return _uri; }
+      }
+      public int Width
+      {
+        get { return _width; }
+      }
+      public int Height
+      {
+        get { return _height; }
+      }
+      public string MimeType
+      {
+        get { return _mimeType; }
+      }
+    }
 
     /// <summary>
     /// The container to hold UPnPDevices and UPnPServices.
@@ -122,6 +154,8 @@ namespace OpenSource.UPnP
 
         private System.Drawing.Image _icon = null;
         private System.Drawing.Image _icon2 = null;
+        private IList<IconInfo> _iconInfo = new List<IconInfo>();
+
         // Note: Cannot be created dynamically from the icon property; http://www.dotnet247.com/247reference/msgs/49/248277.aspx
         private System.Drawing.Icon _favicon = null;
 
@@ -135,6 +169,9 @@ namespace OpenSource.UPnP
         private String RootPath;
         private bool ControlPointOnly;
         private string __DeviceURN;
+
+        public string DLNA_Doc = null;
+        public string DLNA_Cap = null;
 
         public String DeviceURN
         {
@@ -176,6 +213,10 @@ namespace OpenSource.UPnP
         /// bool that indicates if a presentation page exists
         /// </summary>
         public bool HasPresentation;
+        public bool HasUploadImage;
+        public bool HasUploadAudio;
+        public bool HasUploadVideo;
+        public bool HasCreateContainers;
         public Uri BaseURL;
         public String LocationURL;
         public String FriendlyName;
@@ -294,6 +335,10 @@ namespace OpenSource.UPnP
                 if (this.ControlPointOnly == false) _icon2 = value;
             }
         }
+        public IList<IconInfo> IconInfo
+        {
+          get { return _iconInfo; }
+        }
 
         // Favicon. Will not be read from remote device
         public System.Drawing.Icon favicon
@@ -355,6 +400,10 @@ namespace OpenSource.UPnP
             ControlPointOnly = true;
             Services = new UPnPService[0];
             HasPresentation = false;
+            HasUploadAudio = false;
+            HasUploadVideo = false;
+            HasUploadVideo = false;
+            HasCreateContainers = false;
 
             VirtualDir_Table = new Hashtable();
             VirtualDir_Header_Table = new Hashtable();
@@ -2457,6 +2506,21 @@ namespace OpenSource.UPnP
                                 RetVal.HasPresentation = true;
                                 RetVal.PresentationURL = XMLDoc.ReadString();
                                 break;
+                            case "X_DLNADOC":
+                                RetVal.DLNA_Doc = XMLDoc.ReadString();
+                                break;
+                            case "X_DLNACAP":
+                                RetVal.DLNA_Cap = XMLDoc.ReadString();
+                                if (null != RetVal.DLNA_Cap)
+                                {
+                                  String sDelimiters = ",";
+                                  List<string> asCaps = new List<string>(RetVal.DLNA_Cap.Split(sDelimiters.ToCharArray()));
+                                  RetVal.HasUploadAudio = asCaps.Contains("audio-upload");
+                                  RetVal.HasUploadVideo = asCaps.Contains("av-upload");
+                                  RetVal.HasUploadImage = asCaps.Contains("image-upload");
+                                  RetVal.HasCreateContainers = asCaps.Contains("create-child-container");
+                                }
+                                break;
                             case "serviceList":
                                 if (XMLDoc.IsEmptyElement) break;
 
@@ -2536,6 +2600,10 @@ namespace OpenSource.UPnP
             StringReader MyString = new StringReader(XML);
             XmlTextReader XMLDoc = new XmlTextReader(MyString);
             String iurl = null;
+            String sMimeType = null;
+
+            int iWidth = 0;
+            int iHeight = 0;
 
             try
             {
@@ -2548,13 +2616,24 @@ namespace OpenSource.UPnP
                     XMLDoc.MoveToContent();
                     while (XMLDoc.LocalName != "icon")
                     {
-                        if (XMLDoc.LocalName == "url")
+                        switch(XMLDoc.LocalName)
                         {
+                          case "url":
                             iurl = XMLDoc.ReadString();
-                        }
-                        else
-                        {
+                            break;
+                          case "mimetype":
+                            sMimeType = XMLDoc.ReadString();
+                            break;
+                          case "width":
+                            iWidth = Int32.Parse(XMLDoc.ReadString());
+                            break;
+                          case "height":
+                            iHeight = Int32.Parse(XMLDoc.ReadString());
+                            break;
+
+                          default:
                             XMLDoc.Skip();
+                            break;
                         }
                         XMLDoc.Read();
                         XMLDoc.MoveToContent();
@@ -2574,7 +2653,12 @@ namespace OpenSource.UPnP
                             iurl = HTTPMessage.UnEscapeString(d.BaseURL.AbsoluteUri + iurl);
                         }
                     }
-                    d.FetchIcon(new Uri(iurl));
+
+                    Uri iconUri = new Uri(iurl);
+                    IconInfo oIconInfo = new IconInfo(iconUri, iWidth, iHeight, sMimeType);
+                  d._iconInfo.Add(oIconInfo);
+
+                  d.FetchIcon(iconUri);
                 }
             }
             catch (Exception ex)
@@ -2749,6 +2833,11 @@ namespace OpenSource.UPnP
             //
             XDoc.WriteElementString("deviceType", DeviceURN);
 
+            if(null != this.DLNA_Doc)
+            {
+                // below element is for DLNA compliance
+                XDoc.WriteElementString("X_DLNADOC", "urn:schemas-dlna-org:device-1-0", this.DLNA_Doc);
+            }
 
             if (HasPresentation == true)
             {

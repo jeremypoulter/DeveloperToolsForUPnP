@@ -1654,6 +1654,13 @@ namespace OpenSource.UPnP
             }
             return (T);
         }
+        public string ServiceURL
+        {
+          get
+          {
+            return this.SCPDURL;
+          }
+        }
         /// <summary>
         /// Get/Set the URN for this Service.
         /// </summary>
