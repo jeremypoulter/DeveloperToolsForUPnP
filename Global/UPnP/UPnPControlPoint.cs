@@ -69,25 +69,22 @@ namespace OpenSource.UPnP
         public event SSDP.NotifyHandler OnNotify;
 
         /// <summary>
+        /// Packet Sniffing Event
+        /// </summary>
+        public event SSDP.SnifferHandler OnSniffPacket;
+
+        /// <summary>
         /// Constructs a new Control Point, and waits for your commands and receives events
         /// </summary>
         public UPnPControlPoint()
+          : this(null)
         {
-            CreateTable = Hashtable.Synchronized(new Hashtable());
-            NetInfo = new NetworkInfo(new NetworkInfo.InterfaceHandler(NewInterface));
-            SyncData = ArrayList.Synchronized(new ArrayList());
-            SSDPSessions = Hashtable.Synchronized(new Hashtable());
-            Lifetime = new LifeTimeMonitor();
-            Lifetime.OnExpired += new LifeTimeMonitor.LifeTimeHandler(HandleExpired);
-
-            SSDPServer = new SSDP(65535);
-            SSDPServer.OnNotify += new SSDP.NotifyHandler(HandleNotify);
         }
 
         public UPnPControlPoint(NetworkInfo ni)
         {
             CreateTable = Hashtable.Synchronized(new Hashtable());
-            NetInfo = ni;
+            NetInfo = (null != ni) ? ni : new NetworkInfo(new NetworkInfo.InterfaceHandler(NewInterface));
             SyncData = ArrayList.Synchronized(new ArrayList());
             SSDPSessions = Hashtable.Synchronized(new Hashtable());
             Lifetime = new LifeTimeMonitor();
@@ -95,6 +92,7 @@ namespace OpenSource.UPnP
 
             SSDPServer = new SSDP(65535);
             SSDPServer.OnNotify += new SSDP.NotifyHandler(HandleNotify);
+            SSDPServer.OnSniffPacket += new SSDP.SnifferHandler(HandleSniffer);
         }
 
         ~UPnPControlPoint()
@@ -119,6 +117,11 @@ namespace OpenSource.UPnP
         {
             if (IsAlive && LocationURL != null) OpenSource.Utilities.EventLogger.Log(this, System.Diagnostics.EventLogEntryType.SuccessAudit, LocationURL.ToString());
             if (OnNotify != null) OnNotify(source, local, LocationURL, IsAlive, USN, ST, MaxAge, Packet);
+        }
+
+        private void HandleSniffer(IPEndPoint source, IPEndPoint dest, HTTPMessage Packet)
+        {
+          if (OnSniffPacket != null) OnSniffPacket(source, dest, Packet);
         }
 
         /// <summary>
