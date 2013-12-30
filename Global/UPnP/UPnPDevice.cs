@@ -2614,7 +2614,7 @@ namespace OpenSource.UPnP
                 {
                     XMLDoc.Read();
                     XMLDoc.MoveToContent();
-                    while (XMLDoc.LocalName != "icon")
+                    while(false == XMLDoc.EOF && "icon" != XMLDoc.LocalName)
                     {
                         switch(XMLDoc.LocalName)
                         {
