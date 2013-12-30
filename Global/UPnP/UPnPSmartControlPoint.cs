@@ -32,7 +32,7 @@ namespace OpenSource.UPnP
     public sealed class UPnPSmartControlPoint
     {
         private bool MultiFilter = true;
-        internal static UPnPInternalSmartControlPoint iSCP = new UPnPInternalSmartControlPoint();
+        private UPnPInternalSmartControlPoint iSCP = null;
         private string[] PartialMatchFilters = new string[1] { "upnp:rootdevice" };
         private double[] MinimumVersion = new double[1] { 1.0 };
 
@@ -46,6 +46,7 @@ namespace OpenSource.UPnP
         /// </para>
         /// </summary>
         public event DeviceHandler OnAddedDevice;
+
         /// <summary>
         /// Triggered when a Device that passes the filter disappears from the network
         /// </summary>
@@ -55,11 +56,13 @@ namespace OpenSource.UPnP
         /// Triggered when a Service that passes the filter appears on the network
         /// </summary>
         public event ServiceHandler OnAddedService;
+
         /// <summary>
         /// Triggered when a Service that passes the filter disappears from the network
         /// </summary>
         public event ServiceHandler OnRemovedService;
 
+        
 
         public void ForceDisposeDevice(UPnPDevice root)
         {
@@ -140,6 +143,8 @@ namespace OpenSource.UPnP
             if (OnAddedDeviceSink != null) { this.OnAddedDevice += OnAddedDeviceSink; }
             if (OnAddedServiceSink != null) { this.OnAddedService += OnAddedServiceSink; }
 
+            iSCP = new UPnPInternalSmartControlPoint(1 == Filters.Length ? Filters[0] : "upnp:rootdevice");
+
             iSCP.OnAddedDevice += new UPnPInternalSmartControlPoint.DeviceHandler(HandleAddedDevice);
             iSCP.OnDeviceExpired += new UPnPInternalSmartControlPoint.DeviceHandler(HandleExpiredDevice);
             iSCP.OnRemovedDevice += new UPnPInternalSmartControlPoint.DeviceHandler(HandleRemovedDevice);
@@ -154,7 +159,7 @@ namespace OpenSource.UPnP
 
         /// <summary>
         /// Keep track of all UPnP devices on the network. The user can expect the OnAddedDeviceSink
-        /// delegate to immidiatly be called for each device that is already known that matches the
+        /// delegate to immediately be called for each device that is already known that matches the
         /// filter.
         /// </summary>
         /// <param name="OnAddedDeviceSink">Delegate called when a UPnP device is detected that match the filter</param>
@@ -163,6 +168,16 @@ namespace OpenSource.UPnP
             : this(OnAddedDeviceSink, OnAddedServiceSink, new string[1] { DevicePartialMatchFilter })
         {
             MultiFilter = false;
+        }
+
+        void Dispose()
+        {
+          iSCP.OnAddedDevice -= new UPnPInternalSmartControlPoint.DeviceHandler(HandleAddedDevice);
+          iSCP.OnDeviceExpired -= new UPnPInternalSmartControlPoint.DeviceHandler(HandleExpiredDevice);
+          iSCP.OnRemovedDevice -= new UPnPInternalSmartControlPoint.DeviceHandler(HandleRemovedDevice);
+          iSCP.OnUpdatedDevice -= new UPnPInternalSmartControlPoint.DeviceHandler(HandleUpdatedDevice);
+
+          iSCP = null;
         }
 
         /// <summary>
@@ -258,6 +273,13 @@ namespace OpenSource.UPnP
                 return (a);
             }
         }
+
+
+        public UPnPControlPoint ControlPoint
+        {
+          get { return iSCP.ControlPoint; }
+        }
+
 
         /// <summary>
         /// Forward the OnAddedDevice event to the user.

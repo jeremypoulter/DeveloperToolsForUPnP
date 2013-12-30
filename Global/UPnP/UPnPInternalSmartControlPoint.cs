@@ -49,6 +49,8 @@ namespace OpenSource.UPnP
         private WeakEvent OnRemovedDeviceEvent = new WeakEvent();
         private WeakEvent OnUpdatedDeviceEvent = new WeakEvent();
 
+        private string filter = null;
+
         public event DeviceHandler OnDeviceExpired
         {
             add { OnDeviceExpiredEvent.Register(value); }
@@ -89,6 +91,11 @@ namespace OpenSource.UPnP
         }
 
         public UPnPInternalSmartControlPoint()
+          : this("upnp:rootdevice")
+        {
+        }
+
+        public UPnPInternalSmartControlPoint(string filter)
         {
             deviceFactory.OnDevice += new UPnPDeviceFactory.UPnPDeviceHandler(DeviceFactoryCreationSink);
             deviceFactory.OnFailed += new UPnPDeviceFactory.UPnPDeviceFailedHandler(DeviceFactoryFailedSink);
@@ -104,7 +111,8 @@ namespace OpenSource.UPnP
             genericControlPoint.OnSearch += new UPnPControlPoint.SearchHandler(UPnPControlPointSearchSink);
             genericControlPoint.OnNotify += new SSDP.NotifyHandler(SSDPNotifySink);
 
-            genericControlPoint.FindDeviceAsync("upnp:rootdevice");
+            this.filter = filter;
+            genericControlPoint.FindDeviceAsync(filter);
         }
 
         public void Rescan()
@@ -116,17 +124,17 @@ namespace OpenSource.UPnP
                 l = new ArrayList(deviceTable.Keys);
             }
             foreach (string USN in l) deviceLifeTimeClock.Add(USN, 20);
-            genericControlPoint.FindDeviceAsync("upnp:rootdevice");
+            genericControlPoint.FindDeviceAsync(filter);
         }
 
         public void UnicastSearch(IPAddress RemoteAddress)
         {
-            genericControlPoint.FindDeviceAsync("upnp:rootdevice", RemoteAddress);
+            genericControlPoint.FindDeviceAsync(filter, RemoteAddress);
         }
 
         private void NetworkInfoNewInterfaceSink(NetworkInfo sender, IPAddress Intfce)
         {
-            if (genericControlPoint != null) genericControlPoint.FindDeviceAsync("upnp:rootdevice");
+            if (genericControlPoint != null) genericControlPoint.FindDeviceAsync(filter);
         }
         private void NetworkInfoOldInterfaceSink(NetworkInfo sender, IPAddress Intfce)
         {
@@ -151,7 +159,7 @@ namespace OpenSource.UPnP
                 OnRemovedDeviceEvent.Fire(this, d);
             }
 
-            genericControlPoint.FindDeviceAsync("upnp:rootdevice");
+            genericControlPoint.FindDeviceAsync(filter);
         }
 
         public UPnPDevice[] GetCurrentDevices()
@@ -278,7 +286,7 @@ namespace OpenSource.UPnP
         {
             UPnPDevice removedDevice = null;
             // Simple ignore everything that is not root
-            if (SearchTarget != "upnp:rootdevice") return;
+            if (SearchTarget != filter) return;
 
             if (IsAlive == false)
             {
@@ -484,5 +492,9 @@ namespace OpenSource.UPnP
             deviceFactory.CreateDevice(deviceInfo.BaseURL, deviceInfo.MaxAge, null, null);
         }
 
+        public UPnPControlPoint ControlPoint
+        {
+          get { return genericControlPoint; }
+        }
     }
 }
