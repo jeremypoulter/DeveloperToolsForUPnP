@@ -1,5 +1,6 @@
 package {{{PACKAGE}}};
 
+import android.util.Base64;
 import java.util.jar.Attributes;
 import org.apache.http.message.BasicNameValuePair;
 import opentools.upnp.UPnPService;

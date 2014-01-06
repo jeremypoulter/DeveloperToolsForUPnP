@@ -13,6 +13,10 @@ namespace UPnPStackBuilder
         private string nspace = "OpenSource.Sample";
         private string project = "SampleApplication";
         private string cl = "\r\n";
+
+        // TODO: Make a UI option
+        private bool singleInvokeHandler = false;
+
         public Hashtable Settings = new Hashtable();
         public ArrayList AllServices = new ArrayList();
         public Hashtable ServiceNames;
@@ -131,43 +135,53 @@ namespace UPnPStackBuilder
             Log("Writing main stack module...");
 
             #region Create the Directory Structure
-            outputDirectory.CreateSubdirectory("assets");
-            outputDirectory.CreateSubdirectory("bin");
-            #region "gen"
-            DirectoryInfo genDir = outputDirectory.CreateSubdirectory("gen");
-            string[] pName = nspace.Split(new string[] { "." }, StringSplitOptions.None);
-            foreach (string pNameEx in pName)
+            if (Configuration.BareBonesSample)
             {
-                genDir = genDir.CreateSubdirectory(pNameEx);
+                outputDirectory.CreateSubdirectory("assets");
+                outputDirectory.CreateSubdirectory("bin");
             }
-            writer = File.CreateText(genDir.FullName + "\\R.java");
-            writer.Write(SourceCodeRepository.ReadFileStore("Android\\gen\\R.java").Replace("{{{PACKAGE}}}", nspace));
-            writer.Close();
+            string[] pName = nspace.Split(new string[] { "." }, StringSplitOptions.None);
+            #region "gen"
+            if(Configuration.BareBonesSample)
+            {
+                DirectoryInfo genDir = outputDirectory.CreateSubdirectory("gen");
+                foreach (string pNameEx in pName)
+                {
+                    genDir = genDir.CreateSubdirectory(pNameEx);
+                }
+                writer = File.CreateText(genDir.FullName + "\\R.java");
+                writer.Write(SourceCodeRepository.ReadFileStore("Android\\gen\\R.java").Replace("{{{PACKAGE}}}", nspace));
+                writer.Close();
+            }
             #endregion
             #region "res"
-            DirectoryInfo resDir = outputDirectory.CreateSubdirectory("res");
-            byte[] dpi = SourceCodeRepository.ReadFileStoreBin("Android\\res\\drawable-hdpi\\icon.png");
-            fs = File.Create(resDir.CreateSubdirectory("drawable-hdpi").FullName + "\\icon.png", dpi.Length);
-            fs.Write(dpi, 0, dpi.Length);
-            fs.Close();
+            DirectoryInfo resDir = null;
+            if (Configuration.BareBonesSample)
+            {
+                resDir = outputDirectory.CreateSubdirectory("res");
+                byte[] dpi = SourceCodeRepository.ReadFileStoreBin("Android\\res\\drawable-hdpi\\icon.png");
+                fs = File.Create(resDir.CreateSubdirectory("drawable-hdpi").FullName + "\\icon.png", dpi.Length);
+                fs.Write(dpi, 0, dpi.Length);
+                fs.Close();
 
-            dpi = SourceCodeRepository.ReadFileStoreBin("Android\\res\\drawable-ldpi\\icon.png");
-            fs = File.Create(resDir.CreateSubdirectory("drawable-ldpi").FullName + "\\icon.png", dpi.Length);
-            fs.Write(dpi, 0, dpi.Length);
-            fs.Close();
+                dpi = SourceCodeRepository.ReadFileStoreBin("Android\\res\\drawable-ldpi\\icon.png");
+                fs = File.Create(resDir.CreateSubdirectory("drawable-ldpi").FullName + "\\icon.png", dpi.Length);
+                fs.Write(dpi, 0, dpi.Length);
+                fs.Close();
 
-            dpi = SourceCodeRepository.ReadFileStoreBin("Android\\res\\drawable-mdpi\\icon.png");
-            fs = File.Create(resDir.CreateSubdirectory("drawable-mdpi").FullName + "\\icon.png", dpi.Length);
-            fs.Write(dpi, 0, dpi.Length);
-            fs.Close();
+                dpi = SourceCodeRepository.ReadFileStoreBin("Android\\res\\drawable-mdpi\\icon.png");
+                fs = File.Create(resDir.CreateSubdirectory("drawable-mdpi").FullName + "\\icon.png", dpi.Length);
+                fs.Write(dpi, 0, dpi.Length);
+                fs.Close();
 
-            writer = File.CreateText(resDir.CreateSubdirectory("layout").FullName + "\\main.xml");
-            writer.Write(SourceCodeRepository.ReadFileStore("Android\\res\\layout\\main.xml"));
-            writer.Close();
+                writer = File.CreateText(resDir.CreateSubdirectory("layout").FullName + "\\main.xml");
+                writer.Write(SourceCodeRepository.ReadFileStore("Android\\res\\layout\\main.xml"));
+                writer.Close();
 
-            writer = File.CreateText(resDir.CreateSubdirectory("values").FullName + "\\strings.xml");
-            writer.Write(SourceCodeRepository.ReadFileStore("Android\\res\\values\\strings.xml").Replace("{{{PROJECTNAME}}}", ProjectName));
-            writer.Close();
+                writer = File.CreateText(resDir.CreateSubdirectory("values").FullName + "\\strings.xml");
+                writer.Write(SourceCodeRepository.ReadFileStore("Android\\res\\values\\strings.xml").Replace("{{{PROJECTNAME}}}", ProjectName));
+                writer.Close();
+            }
             #endregion
             #region "src"
             DirectoryInfo srcDir = outputDirectory.CreateSubdirectory("src");
@@ -178,34 +192,36 @@ namespace UPnPStackBuilder
             }
             #endregion
             #region Project Files
-            writer = File.CreateText(outputDirectory.FullName + "\\.classpath");
-            writer.Write(SourceCodeRepository.ReadFileStore("Android\\.classpath"));
-            writer.Close();
+            if(Configuration.BareBonesSample)
+            {
+                writer = File.CreateText(outputDirectory.FullName + "\\.classpath");
+                writer.Write(SourceCodeRepository.ReadFileStore("Android\\.classpath"));
+                writer.Close();
 
-            writer = File.CreateText(outputDirectory.FullName + "\\.project");
-            writer.Write(SourceCodeRepository.ReadFileStore("Android\\.project").Replace("{{{PROJECTNAME}}}", ProjectName));
-            writer.Close();
+                writer = File.CreateText(outputDirectory.FullName + "\\.project");
+                writer.Write(SourceCodeRepository.ReadFileStore("Android\\.project").Replace("{{{PROJECTNAME}}}", ProjectName));
+                writer.Close();
 
-            writer = File.CreateText(outputDirectory.FullName + "\\AndroidManifest.xml");
-            writer.Write(
-                SourceCodeRepository.ReadFileStore("Android\\AndroidManifest.xml").Replace("{{{PROJECTNAME}}}", ProjectName)
-                .Replace("{{{PACKAGE}}}", ClassName));
-            writer.Close();
+                writer = File.CreateText(outputDirectory.FullName + "\\AndroidManifest.xml");
+                writer.Write(
+                    SourceCodeRepository.ReadFileStore("Android\\AndroidManifest.xml").Replace("{{{PROJECTNAME}}}", ProjectName)
+                    .Replace("{{{PACKAGE}}}", ClassName));
+                writer.Close();
 
-            writer = File.CreateText(outputDirectory.FullName + "\\default.properties");
-            writer.Write(SourceCodeRepository.ReadFileStore("Android\\default.properties"));
-            writer.Close();
+                writer = File.CreateText(outputDirectory.FullName + "\\default.properties");
+                writer.Write(SourceCodeRepository.ReadFileStore("Android\\default.properties"));
+                writer.Close();
 
-            writer = File.CreateText(outputDirectory.FullName + "\\proguard.cfg");
-            writer.Write(SourceCodeRepository.ReadFileStore("Android\\proguard.cfg"));
-            writer.Close();
+                writer = File.CreateText(outputDirectory.FullName + "\\proguard.cfg");
+                writer.Write(SourceCodeRepository.ReadFileStore("Android\\proguard.cfg"));
+                writer.Close();
 
-            resDir = outputDirectory.CreateSubdirectory("libs");
-            byte[] jar = SourceCodeRepository.ReadFileStoreBin("Android\\UPnPLibrary.jar");
-            fs = File.Create(outputDirectory.FullName + "\\libs\\UPnPLibrary.jar", jar.Length);
-            fs.Write(jar, 0, jar.Length);
-            fs.Close();
-
+                resDir = outputDirectory.CreateSubdirectory("libs");
+                byte[] jar = SourceCodeRepository.ReadFileStoreBin("Android\\UPnPLibrary.jar");
+                fs = File.Create(outputDirectory.FullName + "\\libs\\UPnPLibrary.jar", jar.Length);
+                fs.Write(jar, 0, jar.Length);
+                fs.Close();
+            }
             #endregion
             #endregion
 
@@ -678,36 +694,38 @@ namespace UPnPStackBuilder
 
                     foreach (UPnPAction action in service.Actions)
                     {
-                        sb.Append(" class actionHelper_" + action.Name + cl);
-                        sb.Append(" {" + cl);
+                        String invokeHandlerPostfix = singleInvokeHandler ? "" : "_" + action.Name;
+                      
+                        sb.Append("    public class actionHelper_" + action.Name + cl);
+                        sb.Append("    {" + cl);
 
                         foreach (UPnPArgument arg in action.Arguments)
                         {
-                            sb.Append("     public variableInfo_" + arg.Name + " arg_" + arg.Name + ";" + cl);
+                            sb.Append("        public variableInfo_" + arg.Name + " arg_" + arg.Name + ";" + cl);
                         }
-                        sb.Append("     public actionHelper_" + action.Name + "()" + cl);
-                        sb.Append("     {"+cl);
-                        sb.Append("         if(mService.isScpdLoadAttempted())" + cl);
-                        sb.Append("         {" + cl);
+                        sb.Append("        public actionHelper_" + action.Name + "()" + cl);
+                        sb.Append("        {"+cl);
+                        sb.Append("            if(mService.isScpdLoadAttempted())" + cl);
+                        sb.Append("            {" + cl);
                         foreach (UPnPArgument arg in action.Arguments)
                         {
-                            sb.Append("             arg_" + arg.Name + " = new variableInfo_" + arg.Name + "();" + cl);
+                            sb.Append("                arg_" + arg.Name + " = new variableInfo_" + arg.Name + "();" + cl);
                         }
-                        sb.Append("         }" + cl);
-                        sb.Append("     }" + cl);
-                        sb.Append("     public void refreshVariableInfo()" + cl);
-                        sb.Append("     {" + cl);
-                        sb.Append("         if(mService.isScpdLoadAttempted())" + cl);
-                        sb.Append("         {" + cl);
+                        sb.Append("            }" + cl);
+                        sb.Append("        }" + cl);
+                        sb.Append("        public void refreshVariableInfo()" + cl);
+                        sb.Append("        {" + cl);
+                        sb.Append("            if(mService.isScpdLoadAttempted())" + cl);
+                        sb.Append("            {" + cl);
                         foreach (UPnPArgument arg in action.Arguments)
                         {
-                            sb.Append("             arg_" + arg.Name + " = new variableInfo_" + arg.Name + "();" + cl);
+                            sb.Append("                arg_" + arg.Name + " = new variableInfo_" + arg.Name + "();" + cl);
                         }
-                        sb.Append("         }" + cl);
-                        sb.Append("     }" + cl);
+                        sb.Append("            }" + cl);
+                        sb.Append("        }" + cl);
                         sb.Append(cl);
 
-                        sb.Append("     public void Invoke" + "(");
+                        sb.Append("        public void Invoke" + "(");
                         bool firstArg = true;
                         foreach (UPnPArgument arg in action.Arguments)
                         {
@@ -728,10 +746,10 @@ namespace UPnPStackBuilder
                         {
                             sb.Append(", ");
                         }
-                        sb.Append("Object userState, InvokeHandler userCallback)" + cl);
-                        sb.Append("     {" + cl);
-                        sb.Append("         BasicNameValuePair[] inParam = " + cl);
-                        sb.Append("         {" + cl);
+                        sb.Append("Object userState, InvokeHandler" + invokeHandlerPostfix + " userCallback)" + cl);
+                        sb.Append("        {" + cl);
+                        sb.Append("            BasicNameValuePair[] inParam = " + cl);
+                        sb.Append("            {" + cl);
                         bool firstParm = true;
                         foreach (UPnPArgument arg in action.Arguments)
                         {
@@ -745,21 +763,21 @@ namespace UPnPStackBuilder
                                 {
                                     firstParm = false;
                                 }
-                                sb.Append("             new BasicNameValuePair(\"" + arg.Name + "\"," + SerializeVariable(arg) + ")");
+                                sb.Append("                new BasicNameValuePair(\"" + arg.Name + "\"," + SerializeVariable(arg) + ")");
                             }
                         }
                         sb.Append(cl+"         };" + cl);
-                        sb.Append("         mService.GenericInvoke(\"" + action.Name + "\", inParam, userCallback, userState, new GenericInvokeHandler()" + cl);
-                        sb.Append("         {" + cl);
-                        sb.Append("             @Override" + cl);
-                        sb.Append("             public void OnGenericInvoke(String methodName,  int errorCode, Attributes parameters, Object userState, Object userState2) " + cl);
-                        sb.Append("             {" + cl);
-                        sb.Append("                 InvokeHandler Callback = (InvokeHandler)userState;" + cl);
-                        sb.Append("                 if(errorCode!=0)" + cl);
-                        sb.Append("                 {" + cl);
-                        sb.Append("                     if(Callback!=null)" + cl);
-                        sb.Append("                     {" + cl);
-                        sb.Append("                         Callback.On" + action.Name + "(errorCode, ");
+                        sb.Append("            mService.GenericInvoke(\"" + action.Name + "\", inParam, userCallback, userState, new GenericInvokeHandler()" + cl);
+                        sb.Append("            {" + cl);
+                        sb.Append("                @Override" + cl);
+                        sb.Append("                public void OnGenericInvoke(String methodName,  int errorCode, Attributes parameters, Object userState, Object userState2) " + cl);
+                        sb.Append("                {" + cl);
+                        sb.Append("                    InvokeHandler" + invokeHandlerPostfix + " Callback = (InvokeHandler" + invokeHandlerPostfix + ")userState;" + cl);
+                        sb.Append("                    if(errorCode!=0)" + cl);
+                        sb.Append("                    {" + cl);
+                        sb.Append("                        if(Callback!=null)" + cl);
+                        sb.Append("                        {" + cl);
+                        sb.Append("                            Callback.On" + action.Name + "(errorCode, ");
                         firstArg = true;
                         foreach (UPnPArgument arg in action.Arguments)
                         {
@@ -773,7 +791,35 @@ namespace UPnPStackBuilder
                                 {
                                     firstArg = false;
                                 }
-                                sb.Append(cl+ "                             " + GetSampleValue(arg.RelatedStateVar));
+                                sb.Append(cl+ "                                " + GetSampleValue(arg.RelatedStateVar));
+                            }
+                        }
+                        if (!firstArg)
+                        {
+                            sb.Append(", ");
+                        }
+
+                        sb.Append(cl + "                                userState2);" + cl);
+                        sb.Append("                        }" + cl);
+                        sb.Append("                        return;" + cl);
+                        sb.Append("                    }" + cl);
+                        sb.Append("                    if (Callback != null)" + cl);
+                        sb.Append("                    {" + cl);
+                        sb.Append("                        Callback.On" + action.Name + "(errorCode, ");
+                        firstArg = true;
+                        foreach (UPnPArgument arg in action.Arguments)
+                        {
+                            if (arg.Direction == "out" || arg.IsReturnValue)
+                            {
+                                if (!firstArg)
+                                {
+                                    sb.Append(", ");
+                                }
+                                else
+                                {
+                                    firstArg = false;
+                                }
+                                sb.Append(cl + "                            " + DeSerializeVariable(arg.RelatedStateVar, "parameters.getValue(\"" + arg.Name + "\")"));
                             }
                         }
                         if (!firstArg)
@@ -782,77 +828,49 @@ namespace UPnPStackBuilder
                         }
 
                         sb.Append(cl + "                            userState2);" + cl);
-                        sb.Append("                     }" + cl);
-                        sb.Append("                     return;" + cl);
-                        sb.Append("                 }" + cl);
-                        sb.Append("                 if (Callback != null)" + cl);
-                        sb.Append("                 {" + cl);
-                        sb.Append("                      Callback.On" + action.Name + "(errorCode, ");
-                        firstArg = true;
-                        foreach (UPnPArgument arg in action.Arguments)
-                        {
-                            if (arg.Direction == "out" || arg.IsReturnValue)
-                            {
-                                if (!firstArg)
-                                {
-                                    sb.Append(", ");
-                                }
-                                else
-                                {
-                                    firstArg = false;
-                                }
-                                sb.Append(cl + "                        " + DeSerializeVariable(arg.RelatedStateVar, "parameters.getValue(\"" + arg.Name + "\")"));
-                            }
-                        }
-                        if (!firstArg)
-                        {
-                            sb.Append(", ");
-                        }
-
-                        sb.Append(cl + "                        userState2);" + cl);
-                        sb.Append("                 }" + cl);
-                        sb.Append("             }" + cl);
-                        sb.Append("         });" + cl);
-                        sb.Append("     }" + cl);
+                        sb.Append("                    }" + cl);
+                        sb.Append("                }" + cl);
+                        sb.Append("            });" + cl);
+                        sb.Append("        }" + cl);
 
                         foreach (UPnPArgument arg in action.Arguments)
                         {
-                            sb.Append("     class variableInfo_" + arg.Name + cl);
-                            sb.Append("     {" + cl);
-                            sb.Append("         public String[] AllowedValues;" + cl);
+                            sb.Append("        class variableInfo_" + arg.Name + cl);
+                            sb.Append("        {" + cl);
+                            sb.Append("            public String[] AllowedValues;" + cl);
                             if (IsNumericJavaType(arg.RelatedStateVar))
                             {
-                                sb.Append("         public RangeInfo Range;" + cl);
+                                sb.Append("            public RangeInfo Range;" + cl);
                             }
                             sb.Append(cl);
-                            sb.Append("         variableInfo_" + arg.Name + "()" + cl);
-                            sb.Append("         {" + cl);
-                            sb.Append("             UPnPStateVariable var = mService.getStateVariable(\"" + arg.RelatedStateVar.Name + "\");" + cl);
-                            sb.Append("             if(var!=null)" + cl);
-                            sb.Append("             {" + cl);
-                            sb.Append("                 AllowedValues = var.GetAllowedValues();" + cl);
+                            sb.Append("            variableInfo_" + arg.Name + "()" + cl);
+                            sb.Append("            {" + cl);
+                            sb.Append("                UPnPStateVariable var = mService.getStateVariable(\"" + arg.RelatedStateVar.Name + "\");" + cl);
+                            sb.Append("                if(var!=null)" + cl);
+                            sb.Append("                {" + cl);
+                            sb.Append("                    AllowedValues = var.GetAllowedValues();" + cl);
                             if (IsNumericJavaType(arg.RelatedStateVar))
                             {
-                                sb.Append("                 if(var.getMinRange()!=null && var.getMaxRange()!=null)" + cl);
-                                sb.Append("                 {" + cl);
-                                sb.Append("                     Range = new RangeInfo();" + cl);
-                                sb.Append("                 }" + cl);
+                                sb.Append("                    if(var.getMinRange()!=null && var.getMaxRange()!=null)" + cl);
+                                sb.Append("                    {" + cl);
+                                sb.Append("                        Range = new RangeInfo();" + cl);
+                                sb.Append("                    }" + cl);
                             }
-                            sb.Append("             }" + cl);
-                            sb.Append("         }" + cl);
+                            sb.Append("                }" + cl);
+                            sb.Append("            }" + cl);
                             if (IsNumericJavaType(arg.RelatedStateVar))
                             {
-                                sb.Append("         class RangeInfo" + cl);
-                                sb.Append("         {" + cl);
-                                sb.Append("             public " + GetJavaType(arg.RelatedStateVar) + " minimum = " + this.DeSerializeVariable(arg.RelatedStateVar, "mService.getStateVariable(\"" + arg.RelatedStateVar.Name + "\").getMinRange()") + ";" + cl);
-                                sb.Append("             public " + GetJavaType(arg.RelatedStateVar) + " maximum = " + this.DeSerializeVariable(arg.RelatedStateVar, "mService.getStateVariable(\"" + arg.RelatedStateVar.Name + "\").getMaxRange()") + ";" + cl);
-                                sb.Append("             public " + GetJavaType(arg.RelatedStateVar) + " step = mService.getStateVariable(\"" + arg.RelatedStateVar.Name + "\").getStep()==null?(" + GetJavaType(arg.RelatedStateVar) + ")0:" + this.DeSerializeVariable(arg.RelatedStateVar, "mService.getStateVariable(\"" + arg.RelatedStateVar.Name + "\").getStep()") + ";" + cl);
-                                sb.Append("         }" + cl);
+                                sb.Append("            class RangeInfo" + cl);
+                                sb.Append("            {" + cl);
+                                sb.Append("                public " + GetJavaType(arg.RelatedStateVar) + " minimum = " + this.DeSerializeVariable(arg.RelatedStateVar, "mService.getStateVariable(\"" + arg.RelatedStateVar.Name + "\").getMinRange()") + ";" + cl);
+                                sb.Append("                public " + GetJavaType(arg.RelatedStateVar) + " maximum = " + this.DeSerializeVariable(arg.RelatedStateVar, "mService.getStateVariable(\"" + arg.RelatedStateVar.Name + "\").getMaxRange()") + ";" + cl);
+                                sb.Append("                public " + GetJavaType(arg.RelatedStateVar) + " step = mService.getStateVariable(\"" + arg.RelatedStateVar.Name + "\").getStep()==null?(" + GetJavaType(arg.RelatedStateVar) + ")0:" + this.DeSerializeVariable(arg.RelatedStateVar, "mService.getStateVariable(\"" + arg.RelatedStateVar.Name + "\").getStep()") + ";" + cl);
+                                sb.Append("            }" + cl);
                             }
-                            sb.Append("     }" + cl);
+                            sb.Append("        }" + cl);
                         }
 
-                        sb.Append(" }" + cl); // End of ActionHelper
+                        sb.Append("    }" + cl); // End of ActionHelper
                     }
                     innerClasses = sb.ToString();
                     #endregion
@@ -860,24 +878,24 @@ namespace UPnPStackBuilder
                     sb = new StringBuilder();
                     string queryMethods = "";
 
-                    sb.Append(" public void LoadSCPD(Object userObject, LoadedSCPDHandler userCallback)" + cl);
-                    sb.Append(" {" + cl);
-                    sb.Append("     mService.LoadAndProcessSCPD(new Object[]{this, userObject, userCallback}, new UPnPService_FinishedParsingSCPD()" + cl);
-                    sb.Append("     {" + cl);
-                    sb.Append("         @Override" + cl);
-			        sb.Append("         public void OnFinishedParsingSCPD(UPnPService sender, boolean success, Object userState)"+cl);
-                    sb.Append("         {"+cl);
-                    sb.Append("             Cp" + servicename + " meObject = (Cp" + servicename + ")((Object[])userState)[0];"+cl);
-                    sb.Append("             Object userObject = ((Object[])userState)[1];" + cl);
-                    sb.Append("             LoadedSCPDHandler userCallback = (LoadedSCPDHandler)((Object[])userState)[2];" + cl);
-                    sb.Append("             meObject.RefreshActions();" + cl);
-                    sb.Append("             if(userCallback!=null)" + cl);
-                    sb.Append("             {" + cl);
-                    sb.Append("                 userCallback.OnCp" + servicename + "_LoadedSCPD(meObject, success, userObject);" + cl);
-                    sb.Append("             }" + cl);
-                    sb.Append("         }"+cl);
-                    sb.Append("     });" + cl);
-                    sb.Append(" }" + cl);
+                    sb.Append("    public void LoadSCPD(Object userObject, LoadedSCPDHandler userCallback)" + cl);
+                    sb.Append("    {" + cl);
+                    sb.Append("        mService.LoadAndProcessSCPD(new Object[]{this, userObject, userCallback}, new UPnPService_FinishedParsingSCPD()" + cl);
+                    sb.Append("        {" + cl);
+                    sb.Append("            @Override" + cl);
+			              sb.Append("            public void OnFinishedParsingSCPD(UPnPService sender, boolean success, Object userState)"+cl);
+                    sb.Append("            {"+cl);
+                    sb.Append("                Cp" + servicename + " meObject = (Cp" + servicename + ")((Object[])userState)[0];"+cl);
+                    sb.Append("                Object userObject = ((Object[])userState)[1];" + cl);
+                    sb.Append("                LoadedSCPDHandler userCallback = (LoadedSCPDHandler)((Object[])userState)[2];" + cl);
+                    sb.Append("                meObject.RefreshActions();" + cl);
+                    sb.Append("                if(userCallback!=null)" + cl);
+                    sb.Append("                {" + cl);
+                    sb.Append("                    userCallback.OnCp" + servicename + "_LoadedSCPD(meObject, success, userObject);" + cl);
+                    sb.Append("                }" + cl);
+                    sb.Append("            }"+cl);
+                    sb.Append("        });" + cl);
+                    sb.Append("    }" + cl);
                     sb.Append(cl);
 
                     /*
@@ -891,10 +909,10 @@ namespace UPnPStackBuilder
                      */
                     foreach (UPnPStateVariable var in service.GetStateVariables())
                     {
-                        sb.Append(" public boolean hasStateVariable_" + var.Name + "()" + cl);
-                        sb.Append(" {" + cl);
-                        sb.Append("     return(mService.HasStateVariable(\"" + var.Name + "\"));" + cl);
-                        sb.Append(" }" + cl);
+                        sb.Append("    public boolean hasStateVariable_" + var.Name + "()" + cl);
+                        sb.Append("    {" + cl);
+                        sb.Append("        return(mService.HasStateVariable(\"" + var.Name + "\"));" + cl);
+                        sb.Append("    }" + cl);
                     }
                     queryMethods = sb.ToString();
                     #endregion
@@ -903,7 +921,7 @@ namespace UPnPStackBuilder
                     sb = new StringBuilder();
                     foreach (UPnPAction action in service.Actions)
                     {
-                        sb.Append("     action_" + action.Name + " = !mService.isScpdLoadAttempted()?new actionHelper_" + action.Name + "():(mService.HasAction(\"" + action.Name + "\")?(new actionHelper_" + action.Name + "()):null);" + cl);
+                        sb.Append("        action_" + action.Name + " = !mService.isScpdLoadAttempted()?new actionHelper_" + action.Name + "():(mService.HasAction(\"" + action.Name + "\")?(new actionHelper_" + action.Name + "()):null);" + cl);
                     }
                     refreshActions = sb.ToString();
                     #endregion
@@ -911,22 +929,44 @@ namespace UPnPStackBuilder
                     #region Service Handlers
                     string serviceInterfaces = "";
                     cs = new CodeProcessor(new StringBuilder(), true);
-                    #region Invocation Handler                    
-                    cs.Append("public interface InvokeHandler" + cl);
-                    cs.Append("{" + cl);
-                    foreach (UPnPAction action in service.Actions)
+                    cs.ident = 1;
+                    #region Invocation Handler
+                    if (singleInvokeHandler)
                     {
-                        cs.Append(" public void On" + action.Name + "(int errorCode");
-                        foreach (UPnPArgument arg in action.Arguments)
+                        cs.Append("public interface InvokeHandler" + cl);
+                        cs.Append("{" + cl);
+                        foreach (UPnPAction action in service.Actions)
                         {
-                            if (arg.Direction == "out" || arg.IsReturnValue)
+                            cs.Append(" public void On" + action.Name + "(int errorCode");
+                            foreach (UPnPArgument arg in action.Arguments)
                             {
-                                cs.Append(", " + GetJavaType(arg.RelatedStateVar) + " " + arg.Name);
+                                if (arg.Direction == "out" || arg.IsReturnValue)
+                                {
+                                    cs.Append(", " + GetJavaType(arg.RelatedStateVar) + " " + arg.Name);
+                                }
                             }
+                            cs.Append(", Object userState);" + cl);
                         }
-                        cs.Append(", Object userState);" + cl);
+                        cs.Append("}" + cl);
                     }
-                    cs.Append("}" + cl);
+                    else
+                    {
+                        foreach (UPnPAction action in service.Actions)
+                        {
+                            cs.Append("public interface InvokeHandler_"+action.Name + cl);
+                            cs.Append("{" + cl);
+                            cs.Append(" public void On" + action.Name + "(int errorCode");
+                            foreach (UPnPArgument arg in action.Arguments)
+                            {
+                                if (arg.Direction == "out" || arg.IsReturnValue)
+                                {
+                                    cs.Append(", " + GetJavaType(arg.RelatedStateVar) + " " + arg.Name);
+                                }
+                            }
+                            cs.Append(", Object userState);" + cl);
+                            cs.Append("}" + cl);
+                        }
+                    }
                     #endregion
                     #region Event Handler
                     cs.Append("public interface EventHandler" + cl);
@@ -1068,23 +1108,26 @@ namespace UPnPStackBuilder
             }
             #endregion
 
-            writer = File.CreateText(srcDir.FullName + "\\" + ProjectName + ".java");
-            writer.Write(
-                SourceCodeRepository.ReadFileStore("Android\\SampleApp.java")
-                .Replace("{{{PACKAGE}}}", ClassName)
-                .Replace("{{{PROJECTNAME}}}", ProjectName)
-                .Replace("//{{{CP_DECLARATION}}}", declaration.ToString())
-                .Replace("//{{{CP_HANDLERS}}}", handlers.ToString())
-                .Replace("//{{{CP_INIT}}}", init.ToString())
-                .Replace("//{{{CP_STOP}}}",stop.ToString())
+            if(Configuration.BareBonesSample)
+            {
+                writer = File.CreateText(srcDir.FullName + "\\" + ProjectName + ".java");
+                writer.Write(
+                    SourceCodeRepository.ReadFileStore("Android\\SampleApp.java")
+                    .Replace("{{{PACKAGE}}}", ClassName)
+                    .Replace("{{{PROJECTNAME}}}", ProjectName)
+                    .Replace("//{{{CP_DECLARATION}}}", declaration.ToString())
+                    .Replace("//{{{CP_HANDLERS}}}", handlers.ToString())
+                    .Replace("//{{{CP_INIT}}}", init.ToString())
+                    .Replace("//{{{CP_STOP}}}",stop.ToString())
 
-                .Replace("//{{{DV_DECLARATION}}}", dvDeclaration.ToString())
-                .Replace("//{{{DV_INIT}}}", dvInit.ToString())
-                .Replace("//{{{DV_HANDLERS}}}", dvHandlers.ToString())
-                .Replace("//{{{DV_START}}}",dvStart.ToString())
-                .Replace("//{{{DV_STOP}}}", dvStop.ToString())
-                );
-            writer.Close();
+                    .Replace("//{{{DV_DECLARATION}}}", dvDeclaration.ToString())
+                    .Replace("//{{{DV_INIT}}}", dvInit.ToString())
+                    .Replace("//{{{DV_HANDLERS}}}", dvHandlers.ToString())
+                    .Replace("//{{{DV_START}}}",dvStart.ToString())
+                    .Replace("//{{{DV_STOP}}}", dvStop.ToString())
+                    );
+                writer.Close();
+            }
 
             return (true);
         }
@@ -1218,7 +1261,7 @@ namespace UPnPStackBuilder
                     retVal = fromValue;
                     break;
                 case "boolean":
-                    retVal = "((" + fromValue + ".equals(\"1\") || " + fromValue + ".equals(\"true\") || " + fromValue + ".equals(\"yes\"))?true:false)";
+                    retVal = "((" + fromValue + ".equals(\"1\") || " + fromValue + ".equals(\"true\") || " + fromValue + ".equals(\"yes\")))";
                     break;
                 case "char":
                     switch (var.ValueType)
@@ -1235,25 +1278,25 @@ namespace UPnPStackBuilder
                     }
                     break;
                 case "byte":
-                    retVal = "(Byte.valueOf(" + fromValue + ").byteValue())";
+                    retVal = "(Byte.valueOf(" + fromValue + "))";
                     break;
                 case "short":
-                    retVal = "(Short.valueOf(" + fromValue + ").shortValue())";
+                    retVal = "(Short.valueOf(" + fromValue + "))";
                     break;
                 case "int":
-                    retVal = "(Integer.valueOf(" + fromValue + ").intValue())";
+                    retVal = "(Integer.valueOf(" + fromValue + "))";
                     break;
                 case "long":
-                    retVal = "(Long.valueOf(" + fromValue + ").longValue())";
+                    retVal = "(Long.valueOf(" + fromValue + "))";
                     break;
                 case "float":
-                    retVal = "(Float.valueOf(" + fromValue + ").floatValue())";
+                    retVal = "(Float.valueOf(" + fromValue + "))";
                     break;
                 case "double":
-                    retVal = "(Double.valueOf(" + fromValue + ").doubleValue())";
+                    retVal = "(Double.valueOf(" + fromValue + "))";
                     break;
                 case "byte[]":
-                    retVal = "(Base64.decode(" + fromValue + "),Base64.DEFAULT))";
+                    retVal = "(Base64.decode(" + fromValue + ", Base64.DEFAULT))";
                     break;
                 case "Date":
                     retVal = "(ILibParsers.dateFromString(" + fromValue + "))";
@@ -1298,7 +1341,7 @@ namespace UPnPStackBuilder
                     retVal = arg.Name + ".value.toString()";
                     break;
                 case "byte[]":
-                    retVal = "Base64.encodeToString(" + arg.Name + ".value, Base64.DEFAULT)";
+                    retVal = "Base64.encodeToString(" + arg.Name + ", Base64.DEFAULT)";
                     break;
                 case "Date":
                     if (arg.RelatedStateVar.ValueType == "date")
@@ -1359,7 +1402,7 @@ namespace UPnPStackBuilder
                     retVal = "String.valueOf(" + varName + ")";
                     break;
                 case "byte[]":
-                    retVal = "(Base64.encodeToString(" + varName + ".value, Base64.DEFAULT))";
+                    retVal = "(Base64.encodeToString(" + varName + ", Base64.DEFAULT))";
                     break;
                 case "Date":
                     if (var.ValueType == "date")
