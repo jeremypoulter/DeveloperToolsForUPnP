@@ -39,7 +39,7 @@ namespace OpenSource.Utilities
 
         public static string VersionString = "0.01";
 
-        public delegate void TrackerHandler(object obj);
+        public delegate void TrackerHandler(string operation, string name);
 
 		public struct InstanceStruct
 		{
@@ -721,17 +721,17 @@ namespace OpenSource.Utilities
 				iss.StackList = sb.ToString();
 				((ArrayList)DataTable[name]).Add(iss);
 
-				if (tracker != null)
-				{
-					tracker.UpdateDisplayEntry(name);
-		                    tracker.statusBar.BeginInvoke(new TrackerHandler(HandleTracker),new object[1]{o.GetType().FullName});
+				if (tracker != null) {
+		      tracker.statusBar.BeginInvoke(new TrackerHandler(HandleTracker),new object[]{"Add", o.GetType().FullName});
 				}
 			}
 		}
-	        public static void HandleTracker(object name)
-	        {
-	    	    tracker.statusBar.Text = "Add: " + (string)name;
-	        }
+
+	  public static void HandleTracker(string operation, string name)
+	  {
+      tracker.UpdateDisplayEntry(name);
+      tracker.statusBar.Text = operation + ": " + name;
+	  }
 
 		/// <summary>
 		/// Remove one to the counter for the type specified by object o.
@@ -742,10 +742,8 @@ namespace OpenSource.Utilities
 			if (Enabled == false) return;
 			lock (instancetable)
 			{
-				if (tracker != null)
-				{
-					tracker.UpdateDisplayEntry(o.GetType().FullName);
-					tracker.statusBar.Text = "Remove: " + o.GetType().FullName;
+				if (tracker != null) {
+          tracker.statusBar.BeginInvoke(new TrackerHandler(HandleTracker), new object[] { "Remove", o.GetType().FullName });
 				}
 			}
 		}
