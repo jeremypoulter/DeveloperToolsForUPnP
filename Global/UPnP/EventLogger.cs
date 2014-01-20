@@ -32,6 +32,7 @@ namespace OpenSource.Utilities
 		public static event EventHandler OnEvent;
 		public static bool Enabled = false;
 		public static bool ShowAll = false;
+    public static bool TraceAll = false;
 
 		private static string g_logName = null;
         private static string g_sourceName = null;
@@ -111,7 +112,7 @@ namespace OpenSource.Utilities
 					string origin = sender.GetType().FullName;
 					System.Text.StringBuilder trace = new System.Text.StringBuilder();
 
-					if (LogType==EventLogEntryType.Error)
+					if (TraceAll == true || LogType==EventLogEntryType.Error)
 					{
 						System.Diagnostics.StackTrace t = new StackTrace();
 						for(int i=0;i<t.FrameCount;++i)
