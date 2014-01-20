@@ -276,7 +276,10 @@ namespace OpenSource.UPnP
 
         private void ProcessPacket(HTTPMessage msg, IPEndPoint src, IPEndPoint local)
         {
-            if (OnSniffPacket != null) OnSniffPacket(src, null, msg);
+          if (OnSniffPacket != null)
+          {
+            OnSniffPacket(src, null, msg);
+          }
 
             DText parser = new DText();
             parser.ATTRMARK = "::";
@@ -410,7 +413,9 @@ namespace OpenSource.UPnP
         {
             UdpClient usession = (UdpClient)usessions[msg.LocalEndPoint.Address];
             if (usession == null) return;
-            if (this.OnSniffPacket != null) OnSniffPacket(null, msg.RemoteEndPoint, msg);
+            if (this.OnSniffPacket != null) {
+              OnSniffPacket(null, msg.RemoteEndPoint, msg);
+            }
             byte[] buffer = msg.RawPacket;
             try
             {

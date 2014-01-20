@@ -21,6 +21,7 @@ using System.Text;
 using System.Threading;
 using System.Net.Sockets;
 using System.Collections;
+using System.Diagnostics;
 
 namespace OpenSource.UPnP
 {
@@ -71,7 +72,7 @@ namespace OpenSource.UPnP
         /// <summary>
         /// Packet Sniffing Event
         /// </summary>
-        public event SSDP.SnifferHandler OnSniffPacket;
+        static public event SSDP.SnifferHandler OnSniffPacket;
 
         /// <summary>
         /// Constructs a new Control Point, and waits for your commands and receives events
@@ -121,7 +122,17 @@ namespace OpenSource.UPnP
 
         private void HandleSniffer(IPEndPoint source, IPEndPoint dest, HTTPMessage Packet)
         {
-          if (OnSniffPacket != null) OnSniffPacket(source, dest, Packet);
+          try
+          {
+            if (OnSniffPacket != null)
+            {
+              OnSniffPacket(source, dest, Packet);
+            }
+          }
+          catch (Exception ex)
+          {
+            OpenSource.Utilities.EventLogger.Log(ex);
+          }
         }
 
         /// <summary>
@@ -163,6 +174,7 @@ namespace OpenSource.UPnP
 
         public void FindDeviceAsync(String SearchTarget)
         {
+            OpenSource.Utilities.EventLogger.Log(this, EventLogEntryType.Information, "Find device "+SearchTarget);
             FindDeviceAsync(SearchTarget, Utils.UpnpMulticastV4EndPoint);
             FindDeviceAsync(SearchTarget, Utils.UpnpMulticastV6EndPoint1);
             FindDeviceAsync(SearchTarget, Utils.UpnpMulticastV6EndPoint2);
@@ -217,6 +229,8 @@ namespace OpenSource.UPnP
                         session.Client.SetSocketOption(SocketOptionLevel.IPv6, SocketOptionName.MulticastInterface, BitConverter.GetBytes((int)localaddr.ScopeId));
                     }
 
+                    HandleSniffer((IPEndPoint)session.Client.LocalEndPoint, RemoteEP, request);
+
                     session.Send(buffer, buffer.Length, RemoteEP);
                     session.Send(buffer, buffer.Length, RemoteEP);
                 }
@@ -268,6 +282,8 @@ namespace OpenSource.UPnP
             }
             msg.LocalEndPoint = local;
             msg.RemoteEndPoint = remote;
+
+            HandleSniffer(remote, local, msg);
 
             DText parser = new DText();
 
