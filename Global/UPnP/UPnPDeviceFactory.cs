@@ -50,6 +50,10 @@ namespace OpenSource.UPnP
         private IPAddress localaddr;
         private string expected_usn = null;
 
+        // If set try to tolerate failures and present as much information as can be discovered
+        // TODO: Add an API to set this
+        private bool tolerateFailures = true;
+
         /// <summary>
         /// Instantiate a reusable Factory
         /// </summary>
@@ -154,40 +158,51 @@ namespace OpenSource.UPnP
                     return;
                 }
 
-                if (!success)
+                if(false == tolerateFailures) 
                 {
-                    int checkpoint = 0;
-                    try
+                    if (!success)
                     {
-                        OpenSource.Utilities.EventLogger.Log(this, System.Diagnostics.EventLogEntryType.Error, "HTTP: Could not connect to target: " + url);
-                        checkpoint = 1;
-                        if (OnFailed2 != null) OnFailed2(this, new Uri(url), new Exception("Could not connect to target"), expected_usn);
-                        checkpoint = 2;
+                        int checkpoint = 0;
+                        try
+                        {
+                            OpenSource.Utilities.EventLogger.Log(this, System.Diagnostics.EventLogEntryType.Error, "HTTP: Could not connect to target: " + url);
+                            checkpoint = 1;
+                            if (OnFailed2 != null) OnFailed2(this, new Uri(url), new Exception("Could not connect to target"), expected_usn);
+                            checkpoint = 2;
+                            if (TempDevice != null) TempDevice = null;
+                            checkpoint = 3;
+                        }
+                        catch (Exception ex)
+                        {
+                            OpenSource.Utilities.EventLogger.Log(ex);
+                            ex.Data["v-success"] = success;
+                            ex.Data["v-tag"] = tag;
+                            ex.Data["v-url"] = url;
+                            ex.Data["v-data"] = data;
+                            ex.Data["checkpoint"] = checkpoint;
+                            OpenSource.UPnP.AutoUpdate.ReportCrash(System.Windows.Forms.Application.ProductName, ex);
+                        }
+                        return;
+                    }
+
+                    if (data == null)
+                    {
+                        OpenSource.Utilities.EventLogger.Log(this, System.Diagnostics.EventLogEntryType.Error, "HTTP: Data is empty");
+                        if (OnFailed2 != null) OnFailed2(this, new Uri(url), new Exception("Data is empty"), expected_usn);
                         if (TempDevice != null) TempDevice = null;
-                        checkpoint = 3;
+                        return;
                     }
-                    catch (Exception ex)
-                    {
-                        OpenSource.Utilities.EventLogger.Log(ex);
-                        ex.Data["v-success"] = success;
-                        ex.Data["v-tag"] = tag;
-                        ex.Data["v-url"] = url;
-                        ex.Data["v-data"] = data;
-                        ex.Data["checkpoint"] = checkpoint;
-                        OpenSource.UPnP.AutoUpdate.ReportCrash(System.Windows.Forms.Application.ProductName, ex);
-                    }
-                    return;
                 }
-
-                if (data == null)
+                else
                 {
-                    OpenSource.Utilities.EventLogger.Log(this, System.Diagnostics.EventLogEntryType.Error, "HTTP: Data is empty");
-                    if (OnFailed2 != null) OnFailed2(this, new Uri(url), new Exception("Data is empty"), expected_usn);
-                    if (TempDevice != null) TempDevice = null;
-                    return;
+                    if (!success) {
+                        OpenSource.Utilities.EventLogger.Log(this, System.Diagnostics.EventLogEntryType.Error, "HTTP: Could not connect to target: " + url);
+                    } else if (data == null) {
+                        OpenSource.Utilities.EventLogger.Log(this, System.Diagnostics.EventLogEntryType.Error, "HTTP: Data is empty");
+                    }
                 }
 
-                string html = UTF8Encoding.UTF8.GetString(data);
+                string html = (data != null) ? UTF8Encoding.UTF8.GetString(data) : "";
                 if (tag != null)
                 {
                     bool IsOK = false;
@@ -204,7 +219,9 @@ namespace OpenSource.UPnP
                                                                     "\r\n   URL: " + url +
                                                                     "\r\n   XML:\r\n" + html + 
                                                                     "\r\n");
-                            return;
+                            if (false == tolerateFailures) {
+                              return;
+                            }
                         }
 
                         --ServiceNum;
