@@ -23,6 +23,7 @@ using System.Reflection;
 using System.Collections;
 using System.Net.Sockets;
 using OpenSource.Utilities;
+using System.Collections.Generic;
 
 namespace OpenSource.UPnP
 {
@@ -1341,6 +1342,13 @@ namespace OpenSource.UPnP
 
         private int ComplexType_NamespacePrefixIndex = 0;
 
+        private Exception errorException;
+        public bool HasError { get { return null != errorException; } }
+        public Exception ErrorException { 
+          get { return errorException; }
+          set { if (null == errorException) errorException = value; }
+        }
+
         public UPnPComplexType GetComplexType(string ns, string localName)
         {
             return ((UPnPComplexType)ComplexTypeTable[localName + ":" + ns]);
@@ -2573,26 +2581,40 @@ namespace OpenSource.UPnP
                 }
                 catch (XMLParsingException ex)
                 {
+                    errorException = ex;
                     throw ex;
                 }
                 catch (Exception ex)
                 {
-                    throw new XMLParsingException("Invalid SCPD XML", startLine + XMLDoc.LineNumber, XMLDoc.LinePosition, ex);
+                    errorException = new XMLParsingException("Invalid SCPD XML", startLine + XMLDoc.LineNumber, XMLDoc.LinePosition, ex);
+                    throw errorException;
                 }
 
-
                 // Add Associations
+                List<string> errors = new List<string>();
                 foreach (UPnPAction A in this.Actions)
                 {
                     foreach (UPnPArgument G in A.Arguments)
                     {
                         if (G.RelatedStateVar == null)
                         {
-                            throw (new InvalidRelatedStateVariableException("Action: " + A.Name + " Arg: " + G.Name + " Contains invalid reference: " + G.StateVarName));
+                            errors.Add("Action: " + A.Name + " Arg: " + G.Name + " Contains invalid reference: " + G.StateVarName);
+                            UPnPStateVariable var = new UPnPStateVariable(G.StateVarName);
+                            var.VarType = "string";
+                            A.ParentService.AddStateVariable(var);
                         }
+
                         G.RelatedStateVar.AddAssociation(A.Name, G.Name);
                     }
                 }
+                if (errors.Count > 0)
+                {
+                    errorException = new InvalidRelatedStateVariableException(String.Join("\r\n", errors.ToArray()));
+                    throw errorException;
+                }
+            } else {
+                errorException = new XMLParsingException("scpd element not found", startLine + XMLDoc.LineNumber, XMLDoc.LinePosition);
+                throw errorException;
             }
             // End of If
         }

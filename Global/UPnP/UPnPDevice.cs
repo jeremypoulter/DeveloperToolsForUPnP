@@ -107,6 +107,10 @@ namespace OpenSource.UPnP
         public delegate void OnRemovedHandler(UPnPDevice sender);
         public event OnRemovedHandler OnRemoved;
 
+        private Exception errorException;
+        public bool HasError { get { return null != errorException; } }
+        public Exception ErrorException { get { return errorException; } }
+
         public string BootID
         {
             set
@@ -527,6 +531,16 @@ namespace OpenSource.UPnP
             SSDPServer = new SSDP(ExpirationTimeout);
             SSDPServer.OnRefresh += new SSDP.RefreshHandler(SendNotify);
             SSDPServer.OnSearch += new SSDP.SearchHandler(HandleSearch);
+        }
+
+        // Dummy values representing error device
+        public UPnPDevice(Exception fetchException, string expected_usn, Uri uri, IPAddress localaddr) : this()
+        {
+          this.errorException = fetchException;
+          this.UniqueDeviceName = expected_usn;
+          this.FriendlyName = uri.ToString();
+          this.InterfaceToHost = localaddr;
+          this.IsRoot = true;
         }
 
 
@@ -2346,22 +2360,25 @@ namespace OpenSource.UPnP
                 }
                 else
                 {
-                    return (null);
+                    RetVal.errorException = new Exception("Did not find root element");
                 }
             }
             catch (XMLParsingException ex)
             {
+                RetVal.errorException = ex;
                 OpenSource.Utilities.EventLogger.Log(ex,"\r\nLine: " + ex.line.ToString() + 
                                     ", Position: " + ex.position.ToString() +
                                     "\r\nURL: " + source + "\r\nXML:\r\n" + highlightError(XML,ex.line,ex.position));
             }
             catch (Exception ex)
             {
+                RetVal.errorException = ex;
                 OpenSource.Utilities.EventLogger.Log(ex, "Invalid UPnP Device Description\r\nLine " + (XMLDoc.LineNumber).ToString() +
                                     ", Position " + XMLDoc.LinePosition.ToString() +
                                     "\r\nURL: " + source + "\r\nXML:\r\n" + highlightError(XML, XMLDoc.LineNumber, XMLDoc.LinePosition));
             }
-            return (null);
+
+            return (UPnPDeviceFactory.TolerateFailures ? RetVal : null);
         }
 
         static private void ParseDeviceList(String XML, int startLine, ref UPnPDevice RetVal)

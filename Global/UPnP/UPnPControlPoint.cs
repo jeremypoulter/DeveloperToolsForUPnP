@@ -311,7 +311,5 @@ namespace OpenSource.UPnP
             OpenSource.Utilities.EventLogger.Log(this, System.Diagnostics.EventLogEntryType.SuccessAudit, msg.RemoteEndPoint.ToString());
             if (OnSearch != null) OnSearch(msg.RemoteEndPoint, msg.LocalEndPoint, new Uri(Location), USN, ST, MaxAge);
         }
-
-
     }
 }

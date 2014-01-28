@@ -51,8 +51,7 @@ namespace OpenSource.UPnP
         private string expected_usn = null;
 
         // If set try to tolerate failures and present as much information as can be discovered
-        // TODO: Add an API to set this
-        private bool tolerateFailures = true;
+        static private bool tolerateFailures = false;
 
         /// <summary>
         /// Instantiate a reusable Factory
@@ -151,6 +150,7 @@ namespace OpenSource.UPnP
         {
             try
             {
+                Exception fetchException = null;
                 if (url == null)
                 {
                     OpenSource.Utilities.EventLogger.Log(this, System.Diagnostics.EventLogEntryType.Error, "HTTP: Url is empty");
@@ -195,10 +195,13 @@ namespace OpenSource.UPnP
                 }
                 else
                 {
-                    if (!success) {
-                        OpenSource.Utilities.EventLogger.Log(this, System.Diagnostics.EventLogEntryType.Error, "HTTP: Could not connect to target: " + url);
+                    if (!success) 
+                    {
+                        fetchException = new Exception("HTTP: Could not connect to target: " + url);
+                        OpenSource.Utilities.EventLogger.Log(this, System.Diagnostics.EventLogEntryType.Error, fetchException.Message);
                     } else if (data == null) {
-                        OpenSource.Utilities.EventLogger.Log(this, System.Diagnostics.EventLogEntryType.Error, "HTTP: Data is empty");
+                        fetchException = new Exception("HTTP: Data is empty: " + url);
+                        OpenSource.Utilities.EventLogger.Log(this, System.Diagnostics.EventLogEntryType.Error, fetchException.Message);
                     }
                 }
 
@@ -210,7 +213,12 @@ namespace OpenSource.UPnP
                     {
                         try
                         {
-                            ((UPnPService)tag).ParseSCPD(html, 0);
+                            UPnPService service = (UPnPService)tag;
+                            if (null == fetchException) {
+                              service.ParseSCPD(html, 0);
+                            } else {
+                              service.ErrorException = fetchException;
+                            }
                         }
                         catch (Exception e)
                         {
@@ -238,20 +246,26 @@ namespace OpenSource.UPnP
 
                 try
                 {
+                  if (null == fetchException) {
                     TempDevice = UPnPDevice.Parse(html, new Uri(url), localaddr);
+                  } else {
+                    TempDevice = new UPnPDevice(fetchException, expected_usn, new Uri(url), localaddr);
+                  }
                 }
                 catch (Exception ex)
                 {
                     OpenSource.Utilities.EventLogger.Log(ex, "UPnP Device Description XML parsing exception: URL=" + url);
-                    if (OnFailed2 != null) OnFailed2(this, new Uri(url), new Exception("UPnP Device Description XML parsing exception: URL=" + url), expected_usn);
-                    if (TempDevice != null) TempDevice = null;
+                    if (false == tolerateFailures)
+                    {
+                        if (OnFailed2 != null) OnFailed2(this, new Uri(url), new Exception("UPnP Device Description XML parsing exception: URL=" + url), expected_usn);
+                        if (TempDevice != null) TempDevice = null;
+                    }
                     return;
                 }
                 if (TempDevice == null)
                 {
                     //OpenSource.Utilities.EventLogger.Log(this, System.Diagnostics.EventLogEntryType.Error, "Invalid UPnP Device Description: URL=" + url);
                     if (OnFailed2 != null) OnFailed2(this, new Uri(url), new Exception("Invalid UPnP Device Description XML @" + url), expected_usn);
-                    if (TempDevice != null) TempDevice = null;
                     return;
                 }
                 if (expected_usn != null && TempDevice.UniqueDeviceName != expected_usn)
@@ -290,5 +304,10 @@ namespace OpenSource.UPnP
             }
         }
 
+        static public bool TolerateFailures
+        {
+          get { return tolerateFailures; }
+          set { tolerateFailures = value; }
+        }
     }
 }
