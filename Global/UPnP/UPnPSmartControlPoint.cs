@@ -275,6 +275,21 @@ namespace OpenSource.UPnP
         }
 
 
+        /// <summary>
+        /// The User-Agent to use for requests
+        /// </summary>
+        public string UserAgent
+        {
+            get
+            {
+                return iSCP.UserAgent;
+            }
+            set
+            {
+                iSCP.UserAgent = value;
+            }
+        }
+
         public UPnPControlPoint ControlPoint
         {
           get { return iSCP.ControlPoint; }

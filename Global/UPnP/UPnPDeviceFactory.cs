@@ -49,10 +49,11 @@ namespace OpenSource.UPnP
         private int ServiceNum;
         private IPAddress localaddr;
         private string expected_usn = null;
+        private string userAgent = "UPnP/1.0";
 
         // If set try to tolerate failures and present as much information as can be discovered
         static private bool tolerateFailures = false;
-
+ 
         /// <summary>
         /// Instantiate a reusable Factory
         /// </summary>
@@ -69,11 +70,16 @@ namespace OpenSource.UPnP
         /// <param name="MaxSeconds">Device Refresh Cycle</param>
         /// <param name="deviceCB">Success Callback</param>
         /// <param name="failedCB">Failure Callback</param>
-        public UPnPDeviceFactory(Uri DescLocation, int MaxSeconds, UPnPDeviceHandler deviceCB, UPnPDeviceFailedHandler failedCB, IPAddress localaddr, string usn)
+        public UPnPDeviceFactory(Uri DescLocation, int MaxSeconds, UPnPDeviceHandler deviceCB, UPnPDeviceFailedHandler failedCB, IPAddress localaddr, string usn, string userAgent = null)
         {
             OpenSource.Utilities.InstanceTracker.Add(this);
             httprequestor = new HttpRequestor();
             httprequestor.OnRequestCompleted += new HttpRequestor.RequestCompletedHandler(httprequestor_OnRequestCompleted);
+            if (null != userAgent)
+            {
+                this.userAgent = userAgent;
+            }
+            httprequestor.UserAgent = this.userAgent;
             expected_usn = usn;
 
             CBLock = new object();
@@ -98,7 +104,7 @@ namespace OpenSource.UPnP
             {
                 // TODO: Fix the failed callback
                 UPnPDeviceFactory x = new UPnPDeviceFactory(DescLocation, MaxSeconds, new UPnPDeviceFactory.UPnPDeviceHandler(HandleFactory),
-                    new UPnPDeviceFactory.UPnPDeviceFailedHandler(FactoryFailedSink), localaddr, usn);
+                    new UPnPDeviceFactory.UPnPDeviceFailedHandler(FactoryFailedSink), localaddr, usn, userAgent);
                 CreateTable[x] = x;
             }
         }
@@ -308,6 +314,25 @@ namespace OpenSource.UPnP
         {
           get { return tolerateFailures; }
           set { tolerateFailures = value; }
+        }
+
+        /// <summary>
+        /// The User-Agent to use for requests
+        /// </summary>
+        public string UserAgent
+        {
+            get
+            {
+                return userAgent;
+            }
+            set
+            {
+                userAgent = value;
+                if (httprequestor != null)
+                {
+                    httprequestor.UserAgent = userAgent;
+                }
+            }
         }
     }
 }

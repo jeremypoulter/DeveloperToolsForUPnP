@@ -52,6 +52,7 @@ namespace OpenSource.UPnP
         public int Timeout = 300000;
         public int PendingRequests = 0;
 
+        private string userAgent = "UPnP/1.0";
 
         public void LaunchProxyRequest(string url, byte[] postData, object tag)
         {
@@ -65,6 +66,7 @@ namespace OpenSource.UPnP
             r.request.ConnectionGroupName = url;
             r.request.Timeout = Timeout;
             r.request.Credentials = null;
+            r.request.UserAgent = userAgent;
             r.postdata = postData;
 
             /*
@@ -104,6 +106,7 @@ namespace OpenSource.UPnP
             r.request.Proxy = null;
             r.request.ConnectionGroupName = url;
             r.request.Timeout = Timeout;
+            r.request.UserAgent = userAgent;
             r.postdata = postData;
 
             // Setup the credentials for HTTP digest
@@ -232,6 +235,21 @@ namespace OpenSource.UPnP
             if (OnRequestCompleted != null) OnRequestCompleted(this, true, r.tag, r.url, buf);
         }
 
+
+        /// <summary>
+        /// The User-Agent to use for requests
+        /// </summary>
+        public string UserAgent
+        {
+            get
+            {
+                return userAgent;
+            }
+            set
+            {
+                userAgent = value;
+            }
+        }
 
     }
 }

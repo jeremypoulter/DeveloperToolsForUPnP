@@ -496,5 +496,20 @@ namespace OpenSource.UPnP
         {
           get { return genericControlPoint; }
         }
+
+        /// <summary>
+        /// The User-Agent to use for requests
+        /// </summary>
+        public string UserAgent
+        {
+            get
+            {
+                return deviceFactory.UserAgent;
+            }
+            set
+            {
+                deviceFactory.UserAgent = value;
+            }
+        }
     }
 }
