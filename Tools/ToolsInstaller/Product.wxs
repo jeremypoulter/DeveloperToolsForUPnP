@@ -2,8 +2,8 @@
   <?define UpgradeCode = "25EF6E49-9351-4FAD-BCD0-07E743403CFF"?>
   <?define ProductName = "Developer Tools for UPnP Technologies"?>
   <?define Manufacturer = "Open Source"?>
-  <?define ProductVersion = "0.0.68"?>
-  <?define ProductCode = "0F7ACD8E-66FC-4C14-90B4-9C457CC73D6E"?>
+  <?define ProductVersion = "0.0.69"?>
+  <?define ProductCode = "0F7ACD8E-66FC-4C14-90B4-9C457CC73D6F"?>
   <!-- Don't forget to change the product code when changing the version number! -->
 
   <Product Id="$(var.ProductCode)"
