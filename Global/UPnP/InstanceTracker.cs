@@ -40,6 +40,7 @@ namespace OpenSource.Utilities
         public static string VersionString = "0.01";
 
         public delegate void TrackerHandler(object obj);
+        public delegate void UpdateHandler(object name);
 
 		public struct InstanceStruct
 		{
@@ -690,7 +691,6 @@ namespace OpenSource.Utilities
 				int IDX = 0;
 				StringBuilder sb = new StringBuilder();
 
-				
 				do
 				{
 					SF = ST.GetFrame(IDX);
@@ -707,15 +707,11 @@ namespace OpenSource.Utilities
 						}
 					}
 					++IDX;
-				}while(SF!=null&&IDX!=7);
-				
+				}
+                while(SF!=null&&IDX!=7);
 				
 				string name = o.GetType().FullName;
-				
-				if (DataTable.ContainsKey(name)==false)
-				{
-					DataTable[name] = new ArrayList();
-				}
+				if (DataTable.ContainsKey(name) == false) DataTable[name] = new ArrayList();
 				InstanceStruct iss = new InstanceStruct();
 				iss.WR = new WeakReference(o);
 				iss.StackList = sb.ToString();
@@ -723,15 +719,22 @@ namespace OpenSource.Utilities
 
 				if (tracker != null)
 				{
-					tracker.UpdateDisplayEntry(name);
-		                    tracker.statusBar.BeginInvoke(new TrackerHandler(HandleTracker),new object[1]{o.GetType().FullName});
+					//tracker.UpdateDisplayEntry(name);
+                    tracker.instanceListView.BeginInvoke(new UpdateHandler(HandlerUpdate), new object[1] { name });
+		            tracker.statusBar.BeginInvoke(new TrackerHandler(HandleTracker), new object[1] { o.GetType().FullName });
 				}
 			}
 		}
-	        public static void HandleTracker(object name)
-	        {
-	    	    tracker.statusBar.Text = "Add: " + (string)name;
-	        }
+
+        public static void HandleTracker(object name)
+	    {
+	    	tracker.statusBar.Text = "Add: " + (string)name;
+	    }
+
+        public static void HandlerUpdate(object name)
+        {
+            tracker.UpdateDisplayEntry((string) name);
+        }
 
 		/// <summary>
 		/// Remove one to the counter for the type specified by object o.
