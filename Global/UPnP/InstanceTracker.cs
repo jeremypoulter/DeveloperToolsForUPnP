@@ -690,7 +690,6 @@ namespace OpenSource.Utilities
 				int IDX = 0;
 				StringBuilder sb = new StringBuilder();
 
-				
 				do
 				{
 					SF = ST.GetFrame(IDX);
@@ -707,13 +706,11 @@ namespace OpenSource.Utilities
 						}
 					}
 					++IDX;
-				}while(SF!=null&&IDX!=7);
-				
+				} while(SF!=null&&IDX!=7);
 				
 				string name = o.GetType().FullName;
 				
-				if (DataTable.ContainsKey(name)==false)
-				{
+				if (DataTable.ContainsKey(name)==false) {
 					DataTable[name] = new ArrayList();
 				}
 				InstanceStruct iss = new InstanceStruct();
@@ -722,7 +719,7 @@ namespace OpenSource.Utilities
 				((ArrayList)DataTable[name]).Add(iss);
 
 				if (tracker != null) {
-		      tracker.statusBar.BeginInvoke(new TrackerHandler(HandleTracker),new object[]{"Add", o.GetType().FullName});
+		            tracker.statusBar.BeginInvoke(new TrackerHandler(HandleTracker),new object[]{"Add", o.GetType().FullName});
 				}
 			}
 		}

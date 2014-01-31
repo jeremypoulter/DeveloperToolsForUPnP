@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+char const * UPnPXmlLocation = "/upnp.xml";
+
 #if defined(WIN32) || defined(_WIN32_WCE)
 #	ifndef MICROSTACK_NO_STDAFX
 #		include "stdafx.h"
@@ -245,7 +247,7 @@ int UPnPBuildSendSsdpResponsePacket(void* module, const struct UPnPDataObject *u
 		ILibScratchPad2[len2 + 1] = 0;
 	}
 
-	len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "HTTP/1.1 200 OK\r\nLOCATION: http://%s:%d/\r\nEXT:\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nUSN: uuid:%s%s\r\nCACHE-CONTROL: max-age=%d\r\nST: %s%s\r\n\r\n", ILibScratchPad2, upnp->WebSocketPortNumber, UPnPPLATFORM, upnp->UDN, USNex, upnp->NotifyCycleTime, ST, NTex);
+	len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "HTTP/1.1 200 OK\r\nLOCATION: http://%s:%d%s\r\nEXT:\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nUSN: uuid:%s%s\r\nCACHE-CONTROL: max-age=%d\r\nST: %s%s\r\n\r\n", ILibScratchPad2, upnp->WebSocketPortNumber, UPnPXmlLocation, UPnPPLATFORM, upnp->UDN, USNex, upnp->NotifyCycleTime, ST, NTex);
 	return ILibAsyncUDPSocket_SendTo(module, target, ILibScratchPad, len, ILibAsyncSocket_MemoryOwnership_USER);
 }
 
@@ -285,7 +287,7 @@ int UPnPBuildSendSsdpNotifyPacket(void* module, const struct UPnPDataObject *upn
 	}
 	else return 0;
 
-	len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "NOTIFY * HTTP/1.1\r\nLOCATION: http://%s:%d/\r\nHOST: %s:1900\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nNTS: ssdp:alive\r\nUSN: uuid:%s%s\r\nCACHE-CONTROL: max-age=%d\r\nNT: %s%s\r\n\r\n", ILibScratchPad2, upnp->WebSocketPortNumber, mcaststr, UPnPPLATFORM, upnp->UDN, USNex, upnp->NotifyCycleTime, NT, NTex);
+	len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "NOTIFY * HTTP/1.1\r\nLOCATION: http://%s:%d%s\r\nHOST: %s:1900\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nNTS: ssdp:alive\r\nUSN: uuid:%s%s\r\nCACHE-CONTROL: max-age=%d\r\nNT: %s%s\r\n\r\n", ILibScratchPad2, upnp->WebSocketPortNumber, UPnPXmlLocation, mcaststr, UPnPPLATFORM, upnp->UDN, USNex, upnp->NotifyCycleTime, NT, NTex);
 	return ILibAsyncUDPSocket_SendTo(module, multicast, ILibScratchPad, len, ILibAsyncSocket_MemoryOwnership_USER);
 }
 //{{{END_EmbeddedDevices=0}}}
@@ -312,17 +314,17 @@ int UPnPBuildSendSsdpResponsePacket(void* module, const struct UPnPDataObject *u
 
 	if (EmbeddedDeviceNumber == 0)
 	{
-		len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "HTTP/1.1 200 OK\r\nLOCATION: http://%s:%d/\r\nEXT:\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nUSN: uuid:%s%s\r\nCACHE-CONTROL: max-age=%d\r\nST: %s%s\r\n\r\n",ILibScratchPad2, upnp->WebSocketPortNumber, UPnPPLATFORM, upnp->UDN, USNex, upnp->NotifyCycleTime, ST, NTex);
+		len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "HTTP/1.1 200 OK\r\nLOCATION: http://%s:%d%s\r\nEXT:\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nUSN: uuid:%s%s\r\nCACHE-CONTROL: max-age=%d\r\nST: %s%s\r\n\r\n",ILibScratchPad2, upnp->WebSocketPortNumber, UPnPXmlLocation, UPnPPLATFORM, upnp->UDN, USNex, upnp->NotifyCycleTime, ST, NTex);
 	}
 	else
 	{
 		if (strcmp(ST, "ssdp:all" )== 0)
 		{
-			len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "HTTP/1.1 200 OK\r\nLOCATION: http://%s:%d/\r\nEXT:\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nUSN: uuid:%s_%d%s\r\nCACHE-CONTROL: max-age=%d\r\nST: uuid:%s_%d%s\r\n\r\n" ,ILibScratchPad2, upnp->WebSocketPortNumber, UPnPPLATFORM, upnp->UDN, EmbeddedDeviceNumber, USNex, upnp->NotifyCycleTime, upnp->UDN, EmbeddedDeviceNumber, NTex);
+			len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "HTTP/1.1 200 OK\r\nLOCATION: http://%s:%d%s\r\nEXT:\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nUSN: uuid:%s_%d%s\r\nCACHE-CONTROL: max-age=%d\r\nST: uuid:%s_%d%s\r\n\r\n" ,ILibScratchPad2, upnp->WebSocketPortNumber, UPnPXmlLocation, UPnPPLATFORM, upnp->UDN, EmbeddedDeviceNumber, USNex, upnp->NotifyCycleTime, upnp->UDN, EmbeddedDeviceNumber, NTex);
 		}
 		else
 		{
-			len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "HTTP/1.1 200 OK\r\nLOCATION: http://%s:%d/\r\nEXT:\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nUSN: uuid:%s_%d%s\r\nCACHE-CONTROL: max-age=%d\r\nST: %s%s\r\n\r\n" ,ILibScratchPad2, upnp->WebSocketPortNumber, UPnPPLATFORM, upnp->UDN, EmbeddedDeviceNumber, USNex, upnp->NotifyCycleTime, ST, NTex);
+			len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "HTTP/1.1 200 OK\r\nLOCATION: http://%s:%d%s\r\nEXT:\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nUSN: uuid:%s_%d%s\r\nCACHE-CONTROL: max-age=%d\r\nST: %s%s\r\n\r\n" ,ILibScratchPad2, upnp->WebSocketPortNumber, UPnPXmlLocation, UPnPPLATFORM, upnp->UDN, EmbeddedDeviceNumber, USNex, upnp->NotifyCycleTime, ST, NTex);
 		}
 	}
 	return ILibAsyncUDPSocket_SendTo(module, target, ILibScratchPad, len, ILibAsyncSocket_MemoryOwnership_USER);
@@ -357,17 +359,17 @@ int UPnPBuildSendSsdpNotifyPacket(void* module, const struct UPnPDataObject *upn
 
 	if (EmbeddedDeviceNumber == 0)
 	{
-		len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "NOTIFY * HTTP/1.1\r\nLOCATION: http://%s:%d/\r\nHOST: 239.255.255.250:1900\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nNTS: ssdp:alive\r\nUSN: uuid:%s%s\r\nCACHE-CONTROL: max-age=%d\r\nNT: %s%s\r\n\r\n", ILibScratchPad2, upnp->WebSocketPortNumber, UPnPPLATFORM, upnp->UDN, USNex, upnp->NotifyCycleTime, NT, NTex);
+		len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "NOTIFY * HTTP/1.1\r\nLOCATION: http://%s:%d%s\r\nHOST: 239.255.255.250:1900\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nNTS: ssdp:alive\r\nUSN: uuid:%s%s\r\nCACHE-CONTROL: max-age=%d\r\nNT: %s%s\r\n\r\n", ILibScratchPad2, upnp->WebSocketPortNumber, UPnPXmlLocation, UPnPPLATFORM, upnp->UDN, USNex, upnp->NotifyCycleTime, NT, NTex);
 	}
 	else
 	{
 		if (memcmp(NT, "uuid:", 5) == 0)
 		{
-			len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "NOTIFY * HTTP/1.1\r\nLOCATION: http://%s:%d/\r\nHOST: 239.255.255.250:1900\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nNTS: ssdp:alive\r\nUSN: uuid:%s_%d%s\r\nCACHE-CONTROL: max-age=%d\r\nNT: %s%s_%d\r\n\r\n", ILibScratchPad2, upnp->WebSocketPortNumber, UPnPPLATFORM, upnp->UDN, EmbeddedDeviceNumber, USNex, upnp->NotifyCycleTime, NT, NTex, EmbeddedDeviceNumber);
+			len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "NOTIFY * HTTP/1.1\r\nLOCATION: http://%s:%d%s\r\nHOST: 239.255.255.250:1900\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nNTS: ssdp:alive\r\nUSN: uuid:%s_%d%s\r\nCACHE-CONTROL: max-age=%d\r\nNT: %s%s_%d\r\n\r\n", ILibScratchPad2, upnp->WebSocketPortNumber, UPnPXmlLocation, UPnPPLATFORM, upnp->UDN, EmbeddedDeviceNumber, USNex, upnp->NotifyCycleTime, NT, NTex, EmbeddedDeviceNumber);
 		}
 		else
 		{
-			len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "NOTIFY * HTTP/1.1\r\nLOCATION: http://%s:%d/\r\nHOST: 239.255.255.250:1900\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nNTS: ssdp:alive\r\nUSN: uuid:%s_%d%s\r\nCACHE-CONTROL: max-age=%d\r\nNT: %s%s\r\n\r\n", ILibScratchPad2, upnp->WebSocketPortNumber, UPnPPLATFORM, upnp->UDN, EmbeddedDeviceNumber, USNex, upnp->NotifyCycleTime, NT, NTex);
+			len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "NOTIFY * HTTP/1.1\r\nLOCATION: http://%s:%d%s\r\nHOST: 239.255.255.250:1900\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nNTS: ssdp:alive\r\nUSN: uuid:%s_%d%s\r\nCACHE-CONTROL: max-age=%d\r\nNT: %s%s\r\n\r\n", ILibScratchPad2, upnp->WebSocketPortNumber, UPnPXmlLocation, UPnPPLATFORM, upnp->UDN, EmbeddedDeviceNumber, USNex, upnp->NotifyCycleTime, NT, NTex);
 		}
 	}
 	return ILibAsyncUDPSocket_SendTo(module, multicast, ILibScratchPad, len, ILibAsyncSocket_MemoryOwnership_USER);
@@ -396,7 +398,7 @@ int UPnPBuildSendSsdpResponsePacket(void* module, const struct UPnPDataObject *u
 		ILibScratchPad2[len + 1] = 0;
 	}
 
-	len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "HTTP/1.1 200 OK\r\nCONFIGID.UPNP.ORG: %d\r\nSEARCHPORT.UPNP.ORG: %u\r\nBOOTID.UPNP.ORG: %d\r\nMAXVERSION.UPNP.ORG: %d\r\nLOCATION: http://%s:%d/\r\nEXT:\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nUSN: uuid:%s%s\r\nCACHE-CONTROL: max-age=%d\r\nST: %s%s\r\n\r\n", upnp->ConfigID, upnp->UnicastReceiveSocketPortNumber, upnp->InitialNotify, 1, ILibScratchPad2, upnp->WebSocketPortNumber, UPnPPLATFORM, upnp->UDN, USNex, upnp->NotifyCycleTime, ST, NTex);
+	len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "HTTP/1.1 200 OK\r\nCONFIGID.UPNP.ORG: %d\r\nSEARCHPORT.UPNP.ORG: %u\r\nBOOTID.UPNP.ORG: %d\r\nMAXVERSION.UPNP.ORG: %d\r\nLOCATION: http://%s:%d%s\r\nEXT:\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nUSN: uuid:%s%s\r\nCACHE-CONTROL: max-age=%d\r\nST: %s%s\r\n\r\n", upnp->ConfigID, upnp->UnicastReceiveSocketPortNumber, upnp->InitialNotify, 1, ILibScratchPad2, upnp->WebSocketPortNumber, UPnPXmlLocation, UPnPPLATFORM, upnp->UDN, USNex, upnp->NotifyCycleTime, ST, NTex);
 	return ILibAsyncUDPSocket_SendTo(module, target, ILibScratchPad, len, ILibAsyncSocket_MemoryOwnership_USER);
 }
 
@@ -427,7 +429,7 @@ int UPnPBuildSendSsdpNotifyPacket(void* module, const struct UPnPDataObject *upn
 		mcaststr = UPNP_MCASTv6_GROUPB;
 	}
 
-	len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "NOTIFY * HTTP/1.1\r\nCONFIGID.UPNP.ORG: %d\r\nSEARCHPORT.UPNP.ORG: %u\r\nBOOTID.UPNP.ORG: %d\r\nMAXVERSION.UPNP.ORG: %d\r\nLOCATION: http://%s:%d/\r\nHOST: %s:1900\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nNTS: ssdp:alive\r\nUSN: uuid:%s%s\r\nCACHE-CONTROL: max-age=%d\r\nNT: %s%s\r\n\r\n", upnp->ConfigID, upnp->UnicastReceiveSocketPortNumber, upnp->InitialNotify, 1, ILibScratchPad2, upnp->WebSocketPortNumber, mcaststr, UPnPPLATFORM, upnp->UDN, USNex, upnp->NotifyCycleTime, NT, NTex);
+	len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "NOTIFY * HTTP/1.1\r\nCONFIGID.UPNP.ORG: %d\r\nSEARCHPORT.UPNP.ORG: %u\r\nBOOTID.UPNP.ORG: %d\r\nMAXVERSION.UPNP.ORG: %d\r\nLOCATION: http://%s:%d%s\r\nHOST: %s:1900\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nNTS: ssdp:alive\r\nUSN: uuid:%s%s\r\nCACHE-CONTROL: max-age=%d\r\nNT: %s%s\r\n\r\n", upnp->ConfigID, upnp->UnicastReceiveSocketPortNumber, upnp->InitialNotify, 1, ILibScratchPad2, upnp->WebSocketPortNumber, UPnPXmlLocation, mcaststr, UPnPPLATFORM, upnp->UDN, USNex, upnp->NotifyCycleTime, NT, NTex);
 	return ILibAsyncUDPSocket_SendTo(module, multicast, ILibScratchPad, len, ILibAsyncSocket_MemoryOwnership_USER);
 }
 //{{{END_EmbeddedDevices=0}}}
@@ -454,17 +456,17 @@ int UPnPBuildSendSsdpResponsePacket(void* module, const struct UPnPDataObject *u
 
 	if (EmbeddedDeviceNumber == 0)
 	{
-		len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "HTTP/1.1 200 OK\r\nCONFIGID.UPNP.ORG: %d\r\nSEARCHPORT.UPNP.ORG: %u\r\nBOOTID.UPNP.ORG: %d\r\nMAXVERSION.UPNP.ORG: %d\r\nLOCATION: http://%s:%d/\r\nEXT:\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nUSN: uuid:%s%s\r\nCACHE-CONTROL: max-age=%d\r\nST: %s%s\r\n\r\n", upnp->ConfigID, upnp->UnicastReceiveSocketPortNumber, upnp->InitialNotify, 1, ILibScratchPad2, upnp->WebSocketPortNumber, UPnPPLATFORM, upnp->UDN, USNex, upnp->NotifyCycleTime, ST, NTex);
+		len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "HTTP/1.1 200 OK\r\nCONFIGID.UPNP.ORG: %d\r\nSEARCHPORT.UPNP.ORG: %u\r\nBOOTID.UPNP.ORG: %d\r\nMAXVERSION.UPNP.ORG: %d\r\nLOCATION: http://%s:%d%s\r\nEXT:\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nUSN: uuid:%s%s\r\nCACHE-CONTROL: max-age=%d\r\nST: %s%s\r\n\r\n", upnp->ConfigID, upnp->UnicastReceiveSocketPortNumber, upnp->InitialNotify, 1, ILibScratchPad2, upnp->WebSocketPortNumber, UPnPXmlLocation, UPnPPLATFORM, upnp->UDN, USNex, upnp->NotifyCycleTime, ST, NTex);
 	}
 	else
 	{
 		if (strcmp(ST, "ssdp:all" )== 0)
 		{
-			len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "HTTP/1.1 200 OK\r\nCONFIGID.UPNP.ORG: %d\r\nSEARCHPORT.UPNP.ORG: %u\r\nBOOTID.UPNP.ORG: %d\r\nMAXVERSION.UPNP.ORG: %d\r\nLOCATION: http://%s:%d/\r\nEXT:\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nUSN: uuid:%s_%d%s\r\nCACHE-CONTROL: max-age=%d\r\nST: uuid:%s_%d%s\r\n\r\n", upnp->ConfigID, upnp->UnicastReceiveSocketPortNumber, upnp->InitialNotify, 1, ILibScratchPad2, upnp->WebSocketPortNumber, UPnPPLATFORM, upnp->UDN, EmbeddedDeviceNumber, USNex, upnp->NotifyCycleTime, USN, EmbeddedDeviceNumber, NTex);
+			len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "HTTP/1.1 200 OK\r\nCONFIGID.UPNP.ORG: %d\r\nSEARCHPORT.UPNP.ORG: %u\r\nBOOTID.UPNP.ORG: %d\r\nMAXVERSION.UPNP.ORG: %d\r\nLOCATION: http://%s:%d%s\r\nEXT:\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nUSN: uuid:%s_%d%s\r\nCACHE-CONTROL: max-age=%d\r\nST: uuid:%s_%d%s\r\n\r\n", upnp->ConfigID, upnp->UnicastReceiveSocketPortNumber, upnp->InitialNotify, 1, ILibScratchPad2, upnp->WebSocketPortNumber, UPnPXmlLocation, UPnPPLATFORM, upnp->UDN, EmbeddedDeviceNumber, USNex, upnp->NotifyCycleTime, USN, EmbeddedDeviceNumber, NTex);
 		}
 		else
 		{
-			len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "HTTP/1.1 200 OK\r\nCONFIGID.UPNP.ORG: %d\r\nSEARCHPORT.UPNP.ORG: %u\r\nBOOTID.UPNP.ORG: %d\r\nMAXVERSION.UPNP.ORG: %d\r\nLOCATION: http://%s:%d/\r\nEXT:\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nUSN: uuid:%s_%d%s\r\nCACHE-CONTROL: max-age=%d\r\nST: %s%s\r\n\r\n", upnp->ConfigID, upnp->UnicastReceiveSocketPortNumber, upnp->InitialNotify, 1, ILibScratchPad2, upnp->WebSocketPortNumber, UPnPPLATFORM, upnp->UDN, EmbeddedDeviceNumber, USNex, upnp->NotifyCycleTime, ST, NTex);
+			len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "HTTP/1.1 200 OK\r\nCONFIGID.UPNP.ORG: %d\r\nSEARCHPORT.UPNP.ORG: %u\r\nBOOTID.UPNP.ORG: %d\r\nMAXVERSION.UPNP.ORG: %d\r\nLOCATION: http://%s:%d%s\r\nEXT:\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nUSN: uuid:%s_%d%s\r\nCACHE-CONTROL: max-age=%d\r\nST: %s%s\r\n\r\n", upnp->ConfigID, upnp->UnicastReceiveSocketPortNumber, upnp->InitialNotify, 1, ILibScratchPad2, upnp->WebSocketPortNumber, UPnPXmlLocation, UPnPPLATFORM, upnp->UDN, EmbeddedDeviceNumber, USNex, upnp->NotifyCycleTime, ST, NTex);
 		}
 	}
 	return ILibAsyncUDPSocket_SendTo(module, target, ILibScratchPad, len, ILibAsyncSocket_MemoryOwnership_USER);
@@ -499,17 +501,17 @@ int UPnPBuildSendSsdpNotifyPacket(void* module, const struct UPnPDataObject *upn
 
 	if (EmbeddedDeviceNumber == 0)
 	{
-		len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "NOTIFY * HTTP/1.1\r\nCONFIGID.UPNP.ORG: %d\r\nSEARCHPORT.UPNP.ORG: %u\r\nBOOTID.UPNP.ORG: %d\r\nMAXVERSION.UPNP.ORG: %d\r\nLOCATION: http://%s:%d/\r\nHOST: 239.255.255.250:1900\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nNTS: ssdp:alive\r\nUSN: uuid:%s%s\r\nCACHE-CONTROL: max-age=%d\r\nNT: %s%s\r\n\r\n", upnp->ConfigID, upnp->UnicastReceiveSocketPortNumber, upnp->InitialNotify, 1, ILibScratchPad2, upnp->WebSocketPortNumber, UPnPPLATFORM, upnp->UDN, USNex, upnp->NotifyCycleTime, NT, NTex);
+		len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "NOTIFY * HTTP/1.1\r\nCONFIGID.UPNP.ORG: %d\r\nSEARCHPORT.UPNP.ORG: %u\r\nBOOTID.UPNP.ORG: %d\r\nMAXVERSION.UPNP.ORG: %d\r\nLOCATION: http://%s:%d%s\r\nHOST: 239.255.255.250:1900\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nNTS: ssdp:alive\r\nUSN: uuid:%s%s\r\nCACHE-CONTROL: max-age=%d\r\nNT: %s%s\r\n\r\n", upnp->ConfigID, upnp->UnicastReceiveSocketPortNumber, upnp->InitialNotify, 1, ILibScratchPad2, upnp->WebSocketPortNumber, UPnPXmlLocation, UPnPPLATFORM, upnp->UDN, USNex, upnp->NotifyCycleTime, NT, NTex);
 	}
 	else
 	{
 		if (memcmp(NT, "uuid:", 5) == 0)
 		{
-			len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "NOTIFY * HTTP/1.1\r\nCONFIGID.UPNP.ORG: %d\r\nSEARCHPORT.UPNP.ORG: %u\r\nBOOTID.UPNP.ORG: %d\r\nMAXVERSION.UPNP.ORG: %d\r\nLOCATION: http://%s:%d/\r\nHOST: 239.255.255.250:1900\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nNTS: ssdp:alive\r\nUSN: uuid:%s_%d%s\r\nCACHE-CONTROL: max-age=%d\r\nNT: %s%s_%d\r\n\r\n", upnp->ConfigID, upnp->UnicastReceiveSocketPortNumber, upnp->InitialNotify, 1, ILibScratchPad2, upnp->WebSocketPortNumber, UPnPPLATFORM, upnp->UDN, EmbeddedDeviceNumber, USNex, upnp->NotifyCycleTime, NT, NTex, EmbeddedDeviceNumber);
+			len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "NOTIFY * HTTP/1.1\r\nCONFIGID.UPNP.ORG: %d\r\nSEARCHPORT.UPNP.ORG: %u\r\nBOOTID.UPNP.ORG: %d\r\nMAXVERSION.UPNP.ORG: %d\r\nLOCATION: http://%s:%d%s\r\nHOST: 239.255.255.250:1900\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nNTS: ssdp:alive\r\nUSN: uuid:%s_%d%s\r\nCACHE-CONTROL: max-age=%d\r\nNT: %s%s_%d\r\n\r\n", upnp->ConfigID, upnp->UnicastReceiveSocketPortNumber, upnp->InitialNotify, 1, ILibScratchPad2, upnp->WebSocketPortNumber, UPnPXmlLocation, UPnPPLATFORM, upnp->UDN, EmbeddedDeviceNumber, USNex, upnp->NotifyCycleTime, NT, NTex, EmbeddedDeviceNumber);
 		}
 		else
 		{
-			len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "NOTIFY * HTTP/1.1\r\nCONFIGID.UPNP.ORG: %d\r\nSEARCHPORT.UPNP.ORG: %u\r\nBOOTID.UPNP.ORG: %d\r\nMAXVERSION.UPNP.ORG: %d\r\nLOCATION: http://%s:%d/\r\nHOST: 239.255.255.250:1900\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nNTS: ssdp:alive\r\nUSN: uuid:%s_%d%s\r\nCACHE-CONTROL: max-age=%d\r\nNT: %s%s\r\n\r\n", upnp->ConfigID, upnp->UnicastReceiveSocketPortNumber, upnp->InitialNotify, 1, ILibScratchPad2, upnp->WebSocketPortNumber, UPnPPLATFORM, upnp->UDN, EmbeddedDeviceNumber, USNex, upnp->NotifyCycleTime, NT, NTex);
+			len = snprintf(ILibScratchPad, sizeof(ILibScratchPad), "NOTIFY * HTTP/1.1\r\nCONFIGID.UPNP.ORG: %d\r\nSEARCHPORT.UPNP.ORG: %u\r\nBOOTID.UPNP.ORG: %d\r\nMAXVERSION.UPNP.ORG: %d\r\nLOCATION: http://%s:%d%s\r\nHOST: 239.255.255.250:1900\r\nSERVER: %s, UPnP/!UPNPVERSION!, MicroStack/!MICROSTACKVERSION!\r\nNTS: ssdp:alive\r\nUSN: uuid:%s_%d%s\r\nCACHE-CONTROL: max-age=%d\r\nNT: %s%s\r\n\r\n", upnp->ConfigID, upnp->UnicastReceiveSocketPortNumber, upnp->InitialNotify, 1, ILibScratchPad2, upnp->WebSocketPortNumber, UPnPXmlLocation, UPnPPLATFORM, upnp->UDN, EmbeddedDeviceNumber, USNex, upnp->NotifyCycleTime, NT, NTex);
 		}
 	}
 	return ILibAsyncUDPSocket_SendTo(module, multicast, ILibScratchPad, len, ILibAsyncSocket_MemoryOwnership_USER);
@@ -1728,7 +1730,7 @@ void UPnPProcessHTTPPacket(struct ILibWebServer_Session *session, struct packeth
 	//{{{PRESENTATIONPAGE}}}
 	if (header->DirectiveLength == 4 && memcmp(header->Directive,"HEAD", 4) == 0)
 	{
-		if (header->DirectiveObjLength == 1 && memcmp(header->DirectiveObj, "/", 1) == 0)
+		if (header->DirectiveObjLength == strlen(UPnPXmlLocation) && memcmp(header->DirectiveObj, UPnPXmlLocation, strlen(UPnPXmlLocation)) == 0)
 		{
 			// A HEAD request for the device description document.
 			// We stream the document back, so we don't return content length or anything because the actual response won't have it either
@@ -1764,7 +1766,7 @@ void UPnPProcessHTTPPacket(struct ILibWebServer_Session *session, struct packeth
 	}
 	else if (header->DirectiveLength == 3 && memcmp(header->Directive, "GET", 3) == 0)
 	{
-		if (header->DirectiveObjLength == 1 && memcmp(header->DirectiveObj,"/", 1) == 0)
+		if (header->DirectiveObjLength == strlen(UPnPXmlLocation) && memcmp(header->DirectiveObj, UPnPXmlLocation, strlen(UPnPXmlLocation)) == 0)
 		{
 			// A GET Request for the device description document, so lets stream it back to the client
 			//{{{Device_Object_Model_BEGIN}}}
@@ -1776,19 +1778,19 @@ void UPnPProcessHTTPPacket(struct ILibWebServer_Session *session, struct packeth
 			//{{{Device_Default_Model_END}}}
 		}
 		//{{{DeviceIcon_Begin}}}
-		else if (header->DirectiveObjLength == 9 && memcmp(header->DirectiveObj, "/icon.png", 1) == 0)
+		else if (header->DirectiveObjLength == strlen("/icon.png") && memcmp(header->DirectiveObj, "/icon.png", strlen("/icon.png")) == 0)
 		{
 			ILibWebServer_Send_Raw(session, (char*)UPnPDeviceIcon_SMPNG, {{{IconLength_SMPNG}}}, ILibAsyncSocket_MemoryOwnership_STATIC, 1);
 		}
-		else if (header->DirectiveObjLength == 10 && memcmp(header->DirectiveObj, "/icon2.png", 1) == 0)
+		else if (header->DirectiveObjLength == strlen("/icon2.png") && memcmp(header->DirectiveObj, "/icon2.png", strlen("/icon2.png")) == 0)
 		{
 			ILibWebServer_Send_Raw(session, (char*)UPnPDeviceIcon_LGPNG, {{{IconLength_LGPNG}}}, ILibAsyncSocket_MemoryOwnership_STATIC, 1);
 		}
-		else if (header->DirectiveObjLength == 9 && memcmp(header->DirectiveObj, "/icon.jpg", 1) == 0)
+		else if (header->DirectiveObjLength == strlen("/icon.jpg") && memcmp(header->DirectiveObj, "/icon.jpg", strlen("/icon.jpg")) == 0)
 		{
 			ILibWebServer_Send_Raw(session, (char*)UPnPDeviceIcon_SMJPG, {{{IconLength_SMJPG}}}, ILibAsyncSocket_MemoryOwnership_STATIC, 1);
 		}
-		else if (header->DirectiveObjLength == 10 && memcmp(header->DirectiveObj, "/icon2.jpg", 1) == 0)
+		else if (header->DirectiveObjLength == strlen("/icon2.jpg") && memcmp(header->DirectiveObj, "/icon2.jpg", strlen("/icon2.jpg")) == 0)
 		{
 			ILibWebServer_Send_Raw(session, (char*)UPnPDeviceIcon_LGJPG, {{{IconLength_LGJPG}}}, ILibAsyncSocket_MemoryOwnership_STATIC, 1);
 		}
@@ -1872,8 +1874,19 @@ void UPnPMasterPreSelect(void* object, void *socketset, void *writeset, void *er
 
 	if (UPnPObject->UpdateFlag != 0)
 	{
+		struct sockaddr_in any4;
+		struct sockaddr_in6 any6;
+
 		// Somebody told us that we should recheck our IP Address table, as one of them may have changed
 		UPnPObject->UpdateFlag = 0;
+
+		// Setup ANY addresses
+		memset(&any4, 0, sizeof(struct sockaddr_in));
+		any4.sin_family = AF_INET;
+		any4.sin_port = htons(UPNP_PORT);
+		memset(&any6, 0, sizeof(struct sockaddr_in6));
+		any6.sin6_family = AF_INET6;
+		any6.sin6_port = htons(UPNP_PORT);
 
 		//{{{BEGIN_UPnP/1.1_Specific}}}
 		// Release all of our upnp/1.1 unicast sockets. We'll re-initialise them when we iterate through all the current IP Addresses
@@ -1926,7 +1939,7 @@ void UPnPMasterPreSelect(void* object, void *socketset, void *writeset, void *er
 			UPnPObject->NOTIFY_SEND_socks[i] = ILibAsyncUDPSocket_CreateEx(
 				UPnPObject->Chain,
 				UPNP_MAX_SSDP_HEADER_SIZE,
-				(struct sockaddr*)&(UPnPObject->AddressListV4[i]),
+				(struct sockaddr*)&any4,									// (struct sockaddr*)&(UPnPObject->AddressListV4[i]),
 				ILibAsyncUDPSocket_Reuse_SHARED,
 				NULL,
 				NULL,
@@ -1946,6 +1959,7 @@ void UPnPMasterPreSelect(void* object, void *socketset, void *writeset, void *er
 				UPnPObject);
 
 			ILibAsyncUDPSocket_JoinMulticastGroupV4(UPnPObject->NOTIFY_RECEIVE_socks[i], (struct sockaddr_in*)&(UPnPObject->MulticastAddrV4), (struct sockaddr*)&(UPnPObject->AddressListV4[i]));
+			ILibAsyncUDPSocket_SetLocalInterface(UPnPObject->NOTIFY_RECEIVE_socks[i], (struct sockaddr*)&(UPnPObject->AddressListV4[i]));
 			ILibAsyncUDPSocket_SetMulticastLoopback(UPnPObject->NOTIFY_RECEIVE_socks[i], 1);
 			//{{{BEGIN_MulticastEventing}}}
 			/*
@@ -1981,7 +1995,7 @@ void UPnPMasterPreSelect(void* object, void *socketset, void *writeset, void *er
 				UPnPObject->NOTIFY_RECEIVE_socks6[i] = ILibAsyncUDPSocket_CreateEx(
 					UPnPObject->Chain,
 					UPNP_MAX_SSDP_HEADER_SIZE,
-					(struct sockaddr*)&(UPnPObject->AddressListV6[i]),
+					(struct sockaddr*)&any6,							// (struct sockaddr*)&(UPnPObject->AddressListV6[i]),
 					ILibAsyncUDPSocket_Reuse_SHARED,
 					&UPnPSSDPSink,
 					NULL,
@@ -1996,6 +2010,7 @@ void UPnPMasterPreSelect(void* object, void *socketset, void *writeset, void *er
 					ILibAsyncUDPSocket_JoinMulticastGroupV6(UPnPObject->NOTIFY_RECEIVE_socks6[i], &(UPnPObject->MulticastAddrV6SL), UPnPObject->AddressListV6[i].sin6_scope_id);
 				}
 				ILibAsyncUDPSocket_SetMulticastLoopback(UPnPObject->NOTIFY_RECEIVE_socks6[i], 1);
+				ILibAsyncUDPSocket_SetLocalInterface(UPnPObject->NOTIFY_RECEIVE_socks6[i], (struct sockaddr*)&(UPnPObject->AddressListV6[i]));
 				//{{{BEGIN_MulticastEventing}}}
 				/*
 				UPnPObject->MulticastEventListener = ILibAsyncUDPSocket_Create(UPnPObject->Chain, UPNP_MAX_SSDP_HEADER_SIZE, 0, UPNP_MULTICASTEVENT_PORT, ILibAsyncUDPSocket_Reuse_SHARED, &OnUPnPMulticastEvent, NULL, UPnPObject);
