@@ -656,59 +656,67 @@ namespace OpenSource.UPnP
             bool Ready = false;
             bool Disconnect = false;
 
+
             try
             {
                 SendInfo SI;
                 lock (SendLock)
                 {
-                    try
+                    if (null != MainSocket)
                     {
-                        if (MainSocket.SocketType == SocketType.Stream)
-                        {
-                            sent = MainSocket.EndSend(result);
-                        }
-                        else
-                        {
-                            sent = MainSocket.EndSendTo(result);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        OpenSource.Utilities.EventLogger.Log(ex);
-                        Disconnect = true;
-                    }
-                    lock (CountLock)
-                    {
-                        PendingBytesSent -= sent;
-                        TotalBytesSent += sent;
-                    }
-
-                    if (SendQueue.Count > 0)
-                    {
-                        SI = (SendInfo)SendQueue.Dequeue();
                         try
                         {
                             if (MainSocket.SocketType == SocketType.Stream)
                             {
-                                MainSocket.BeginSend(SI.buffer, SI.offset, SI.count, SocketFlags.None, SendCB, SI.Tag);
+                                sent = MainSocket.EndSend(result);
                             }
                             else
                             {
-                                MainSocket.BeginSendTo(SI.buffer, SI.offset, SI.count, SocketFlags.None, SI.dest, SendCB, SI.Tag);
+                                sent = MainSocket.EndSendTo(result);
                             }
                         }
                         catch (Exception ex)
                         {
                             OpenSource.Utilities.EventLogger.Log(ex);
-                            OpenSource.Utilities.EventLogger.Log(this, System.Diagnostics.EventLogEntryType.Error, "Send Failure [Normal for non-pipelined connection]");
                             Disconnect = true;
+                        }
+                        lock (CountLock)
+                        {
+                            PendingBytesSent -= sent;
+                            TotalBytesSent += sent;
+                        }
+
+                        if (SendQueue.Count > 0)
+                        {
+                            SI = (SendInfo)SendQueue.Dequeue();
+                            try
+                            {
+                                if (MainSocket.SocketType == SocketType.Stream)
+                                {
+                                    MainSocket.BeginSend(SI.buffer, SI.offset, SI.count, SocketFlags.None, SendCB, SI.Tag);
+                                }
+                                else
+                                {
+                                    MainSocket.BeginSendTo(SI.buffer, SI.offset, SI.count, SocketFlags.None, SI.dest, SendCB, SI.Tag);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                OpenSource.Utilities.EventLogger.Log(ex);
+                                OpenSource.Utilities.EventLogger.Log(this, System.Diagnostics.EventLogEntryType.Error, "Send Failure [Normal for non-pipelined connection]");
+                                Disconnect = true;
+                            }
+                        }
+                        else
+                        {
+                            Ready = true;
                         }
                     }
                     else
                     {
-                        Ready = true;
+                        OpenSource.Utilities.EventLogger.Log(this, System.Diagnostics.EventLogEntryType.Warning, "Socket closed while waiting to send to "+RemoteEP.ToString());
+                        Disconnect = true;
                     }
-
                 }
                 if (Disconnect == true)
                 {

@@ -205,7 +205,7 @@ namespace OpenSource.UPnP
 		
 		private ArrayList ParseString(string STR)
 		{
-			if (STR.Length==0)
+			if (null == STR || 0 == STR.Length)
 			{
 				ArrayList Temp = new ArrayList();
 				Temp.Add(new ArrayList());
