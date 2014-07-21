@@ -2433,6 +2433,10 @@ namespace OpenSource.UPnP
             s.ParseSCPD(SCPDXML, 0);
             return (s);
         }
+
+        private string _xml = null;
+        public string XML { get { return _xml;  } }
+
         internal void ParseSCPD(String XML, int startLine)
         {
             bool loadSchema = false;
@@ -2442,6 +2446,8 @@ namespace OpenSource.UPnP
             {
                 return;
             }
+
+            _xml = XML;
 
             string evented = "no";
             string multicast = "no";

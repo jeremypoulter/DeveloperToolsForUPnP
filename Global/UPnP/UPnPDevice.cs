@@ -205,6 +205,10 @@ namespace OpenSource.UPnP
         {
             get
             {
+                if (null == __DeviceURN) {
+                  return null;
+                }
+
                 int len;
                 DText p = new DText();
                 p.ATTRMARK = ":";
@@ -2275,6 +2279,9 @@ namespace OpenSource.UPnP
             return(result);
         }
 
+        private string _xml = null;
+        public string XML { get { return _xml; } }
+
         static internal UPnPDevice Parse(String XML, Uri source, IPAddress Intfce)
         {
             bool Skipping;
@@ -2291,6 +2298,8 @@ namespace OpenSource.UPnP
 
             bool NeedParseDevice = false;
             string NeedParseDeviceString = "";
+
+            RetVal._xml = XML;
 
             try
             {
@@ -2642,10 +2651,10 @@ namespace OpenSource.UPnP
                             sMimeType = XMLDoc.ReadString();
                             break;
                           case "width":
-                            iWidth = Int32.Parse(XMLDoc.ReadString());
+                            Int32.TryParse(XMLDoc.ReadString(), out iWidth);
                             break;
                           case "height":
-                            iHeight = Int32.Parse(XMLDoc.ReadString());
+                            Int32.TryParse(XMLDoc.ReadString(), out iHeight);
                             break;
 
                           default:
@@ -2675,7 +2684,7 @@ namespace OpenSource.UPnP
                     IconInfo oIconInfo = new IconInfo(iconUri, iWidth, iHeight, sMimeType);
                   d._iconInfo.Add(oIconInfo);
 
-                  d.FetchIcon(iconUri);
+                  //d.FetchIcon(iconUri);
                 }
             }
             catch (Exception ex)
