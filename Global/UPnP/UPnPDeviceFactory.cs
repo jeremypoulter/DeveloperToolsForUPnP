@@ -244,7 +244,7 @@ namespace OpenSource.UPnP
                     if (IsOK == true)
                     {
                         TempDevice.descXmlLocation = new Uri(url);
-                        OnDevice(this, TempDevice, new Uri(url));
+                        OnDevice(this, TempDevice.GetDevice(expected_usn), new Uri(url));
                         TempDevice = null;
                     }
                     return;
@@ -274,7 +274,7 @@ namespace OpenSource.UPnP
                     if (OnFailed2 != null) OnFailed2(this, new Uri(url), new Exception("Invalid UPnP Device Description XML @" + url), expected_usn);
                     return;
                 }
-                if (expected_usn != null && TempDevice.UniqueDeviceName != expected_usn)
+                if (expected_usn != null && TempDevice.GetDevice(expected_usn) == null)
                 {
                     OpenSource.Utilities.EventLogger.Log(this, System.Diagnostics.EventLogEntryType.Error, string.Format("Unique ID mismatch between SSDP packet and device description: {0} / {1} ", TempDevice.UniqueDeviceName, expected_usn));
                     if (OnFailed2 != null) OnFailed2(this, new Uri(url), new Exception(string.Format("Unique ID mismatch between SSDP packet and device description: {0} / {1} ", TempDevice.UniqueDeviceName, expected_usn)), expected_usn);
