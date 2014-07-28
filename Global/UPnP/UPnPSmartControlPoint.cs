@@ -476,9 +476,9 @@ namespace OpenSource.UPnP
                                 sList.Add((UPnPService)x);
                                 if (PartialMatchFilters.Length == 1)
                                 {
-                                    if (OnRemovedDevice != null)
+                                    if (OnRemovedService != null)
                                     {
-                                        OnRemovedDevice(this, (UPnPDevice)x);
+                                      OnRemovedService(this, (UPnPService)x);
                                     }
                                 }
                             }
