@@ -245,7 +245,7 @@ namespace OpenSource.UPnP
                     {
                         TempDevice.descXmlLocation = new Uri(url);
                         UPnPDevice device = (null != expected_usn) ? TempDevice.GetDevice(expected_usn) : TempDevice;
-                        OnDevice(this, TempDevice.GetDevice(expected_usn), new Uri(url));
+                        OnDevice(this, device, new Uri(url));
                         TempDevice = null;
                     }
                     return;
