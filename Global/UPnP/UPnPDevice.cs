@@ -22,6 +22,7 @@ using System.Threading;
 using System.Net.Sockets;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace OpenSource.UPnP
 {
@@ -794,7 +795,7 @@ namespace OpenSource.UPnP
         {
             lock (UpdateTable)
             {
-                UPnPDeviceFactory df = new UPnPDeviceFactory(LocationUri, 250, new UPnPDeviceFactory.UPnPDeviceHandler(UpdateDeviceSink), null, null, null);
+                UPnPDeviceFactory df = new UPnPDeviceFactory(LocationUri, 250, new UPnPDeviceFactory.UPnPDeviceHandler(UpdateDeviceSink), null, HostInterface, null);
                 UpdateTable[df] = df;
             }
         }
@@ -2284,6 +2285,11 @@ namespace OpenSource.UPnP
 
         static internal UPnPDevice Parse(String XML, Uri source, IPAddress Intfce)
         {
+            Debug.Assert(null != XML);
+            Debug.Assert(XML.Length > 0);
+            Debug.Assert(null != source);
+            Debug.Assert(null != Intfce);
+
             bool Skipping;
             int embeddedLine = 0;
             //PlugFest HeaderChange

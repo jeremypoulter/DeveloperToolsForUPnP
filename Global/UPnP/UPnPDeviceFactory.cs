@@ -20,6 +20,7 @@ using System.Text;
 using System.Threading;
 using System.Net.Sockets;
 using System.Collections;
+using System.Diagnostics;
 
 namespace OpenSource.UPnP
 {
@@ -72,6 +73,12 @@ namespace OpenSource.UPnP
         /// <param name="failedCB">Failure Callback</param>
         public UPnPDeviceFactory(Uri DescLocation, int MaxSeconds, UPnPDeviceHandler deviceCB, UPnPDeviceFailedHandler failedCB, IPAddress localaddr, string usn, string userAgent = null)
         {
+            Debug.Assert(null != DescLocation);
+            Debug.Assert(null != deviceCB);
+//            Debug.Assert(null != failedCB);
+            Debug.Assert(null != localaddr);
+//            Debug.Assert(null != usn);
+
             OpenSource.Utilities.InstanceTracker.Add(this);
             httprequestor = new HttpRequestor();
             httprequestor.OnRequestCompleted += new HttpRequestor.RequestCompletedHandler(httprequestor_OnRequestCompleted);
