@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <UI Id="GlobalControls">
+      <TextStyle Id="DlgTitleFont" FaceName="Tahoma" Size="12" Bold="no" />
+      <TextStyle Id="DlgSubTitleFont" FaceName="Tahoma" Size="8" Bold="no" />
+    </UI>
+  </Fragment>
+</Wix>

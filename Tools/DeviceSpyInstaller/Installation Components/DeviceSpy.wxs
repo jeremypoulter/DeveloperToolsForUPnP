@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <ComponentGroup Id="DeviceSpyGroup"  >
+      <Component Id="DS" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="DSEXE" Name="Device Sniffer.exe" DiskId="1" Source="!(wix.DSExecutable)"  Vital="yes">
+        </File>
+      </Component>
+      <Component Id="DSDebug" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="DSPDB" Name="Device Sniffer.pdb" DiskId="1" Source="!(wix.DSDebug)"  Vital="yes">
+        </File>
+      </Component>
+      <Component Id="DSpy" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="DSpyEXE" Name="Device Spy.exe" DiskId="1" Source="!(wix.DSpyExecutable)"  Vital="yes">
+        </File>
+      </Component>
+      <Component Id="DSpyDebug" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="DSpyPDB" Name="Device Spy.pdb" DiskId="1" Source="!(wix.DSpyDebug)"  Vital="yes">
+        </File>
+      </Component>
+      <Component Id="NL" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="NLEXE" Name="Network Light.exe" DiskId="1" Source="!(wix.NLExecutable)" Vital="yes">
+        </File>
+      </Component>
+      <Component Id="NLDebug" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="NLPDB" Name="Network Light.pdb" DiskId="1" Source="!(wix.NLDebug)" Vital="yes">
+        </File>
+      </Component>
+      <Component Id="UPnP" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="UPnPDLL" Name="UPnP.dll" DiskId="1" Source="!(wix.UPnPExecutable)" Vital="yes">
+        </File>
+      </Component>
+      <Component Id="UPnPDebug" Guid="*" Directory="APPLICATIONROOTDIRECTORY">
+        <File Id="UPnPPDB" Name="UPnP.pdb" DiskId="1" Source="!(wix.UPnPDebug)" Vital="yes">
+        </File>
+      </Component>
+    </ComponentGroup>	
+  </Fragment>
+</Wix>

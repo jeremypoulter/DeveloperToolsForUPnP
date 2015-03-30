@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  <copyright file="WixUI_InstallDir.wxs" company="Outercurve Foundation">
+    Copyright (c) 2004, Outercurve Foundation.
+    This software is released under Microsoft Reciprocal License (MS-RL).
+    The license and further copyright text can be found in the file
+    LICENSE.TXT at the root directory of the distribution.
+  </copyright>
+-->
+
+<!--
+First-time install dialog sequence:
+ - WixUI_WelcomeDlg
+ - WixUI_LicenseAgreementDlg
+ - WixUI_InstallDirDlg
+ - WixUI_VerifyReadyDlg
+ - WixUI_DiskCostDlg
+
+Maintenance dialog sequence:
+ - WixUI_MaintenanceWelcomeDlg
+ - WixUI_MaintenanceTypeDlg
+ - WixUI_InstallDirDlg
+ - WixUI_VerifyReadyDlg
+
+Patch dialog sequence:
+ - WixUI_WelcomeDlg
+ - WixUI_VerifyReadyDlg
+
+-->
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <UI Id="MyWixUI_InstallDir">
+      <TextStyle Id="WixUI_Font_Normal" FaceName="Tahoma" Size="8" />
+      <TextStyle Id="WixUI_Font_Bigger" FaceName="Tahoma" Size="12" />
+      <TextStyle Id="WixUI_Font_Title" FaceName="Tahoma" Size="9" Bold="yes" />
+
+      <Property Id="DefaultUIFont" Value="WixUI_Font_Normal" />
+      <Property Id="WixUI_Mode" Value="InstallDir" />
+
+      <DialogRef Id="BrowseDlg" />
+      <DialogRef Id="DiskCostDlg" />
+      <DialogRef Id="ErrorDlg" />
+      <DialogRef Id="MyFatalError" />
+      <DialogRef Id="FilesInUse" />
+      <DialogRef Id="MsiRMFilesInUse" />
+      <DialogRef Id="MyPrepareDlg" />
+      <DialogRef Id="MyProgressDlg" />
+      <DialogRef Id="MyResumeDlg" />
+      <DialogRef Id="MyUserExit" />
+      <!--<DialogRef Id="FeaturesDlg" />-->
+
+      <Publish Dialog="MyWelcomeDlg" Control="Next" Event="NewDialog" Value="MyLicenseAgreementDlg">NOT Installed</Publish>
+      <Publish Dialog="MyWelcomeDlg" Control="Next" Event="NewDialog" Value="MyInstallDirDlg">Installed AND PATCH</Publish>
+      <Publish Dialog="MyWelcomeDlg" Control="Next" Event="NewDialog" Value="MyConfirmUpgradeDlg">NOT (EARLIER_VERSION_FOUND = "")</Publish>
+
+      <Publish Dialog="MyConfirmUpgradeDlg" Control="Yes" Event="NewDialog" Value="MyLicenseAgreementDlg">1</Publish>
+
+      <Publish Dialog="MyLicenseAgreementDlg" Control="Back" Event="NewDialog" Value="MyWelcomeDlg">1</Publish>
+      <Publish Dialog="MyLicenseAgreementDlg" Control="Next" Event="NewDialog" Value="MyInstallDirDlg">LicenseAccepted = "1"</Publish>
+
+      <Publish Dialog="BrowseDlg" Control="OK" Event="DoAction" Value="WixUIValidatePath" Order="3">1</Publish>
+      <Publish Dialog="BrowseDlg" Control="OK" Event="SpawnDialog" Value="InvalidDirDlg" Order="4"><![CDATA[WIXUI_INSTALLDIR_VALID<>"1"]]></Publish>
+
+      <Publish Dialog="MyInstallDirDlg" Control="Back" Event="NewDialog" Value="MyLicenseAgreementDlg">1</Publish>
+      <Publish Dialog="MyInstallDirDlg" Control="Next" Event="SetTargetPath" Value="[WIXUI_INSTALLDIR]" Order="1">1</Publish>
+      <Publish Dialog="MyInstallDirDlg" Control="Next" Event="DoAction" Value="WixUIValidatePath" Order="2">NOT WIXUI_DONTVALIDATEPATH</Publish>
+      <Publish Dialog="MyInstallDirDlg" Control="Next" Event="SpawnDialog" Value="InvalidDirDlg" Order="3"><![CDATA[NOT WIXUI_DONTVALIDATEPATH AND WIXUI_INSTALLDIR_VALID<>"1"]]></Publish>
+      <Publish Dialog="MyInstallDirDlg" Control="Next" Event="NewDialog" Value="MyVerifyReadyDlg" Order="4">WIXUI_DONTVALIDATEPATH OR WIXUI_INSTALLDIR_VALID="1"</Publish>
+      <Publish Dialog="MyInstallDirDlg" Control="ChangeFolder" Property="_BrowseProperty" Value="[WIXUI_INSTALLDIR]" Order="1">1</Publish>
+      <Publish Dialog="MyInstallDirDlg" Control="ChangeFolder" Event="SpawnDialog" Value="BrowseDlg" Order="2">1</Publish>
+
+      <Publish Dialog="MyVerifyReadyDlg" Control="Back" Event="NewDialog" Value="MyInstallDirDlg" Order="1">(NOT Installed) </Publish>
+      <Publish Dialog="MyVerifyReadyDlg" Control="Back" Event="NewDialog" Value="MyMaintenanceTypeDlg" Order="2">Installed AND NOT PATCH</Publish>
+      <Publish Dialog="MyVerifyReadyDlg" Control="Back" Event="NewDialog" Value="MyWelcomeDlg" Order="2">Installed AND PATCH</Publish>
+      <!--<Publish Dialog="MyVerifyReadyDlg" Control="Remove" Event="NewDialog" Value="MyExitDialog" Order="2">Installed AND NOT PATCH</Publish>-->
+      <!--<Publish Dialog="MyVerifyReadyDlg" Control="Install" Event="NewDialog" Value="MyProgressDlg" Order="3">NOT Installed</Publish>-->
+
+      <Publish Dialog="MyMaintenanceWelcomeDlg" Control="Next" Event="NewDialog" Value="MyMaintenanceTypeDlg">1</Publish>
+
+      <!--<Publish Dialog="MyMaintenanceTypeDlg" Control="RepairButton" Event="NewDialog" Value="MyVerifyReadyDlg">1</Publish>-->
+      <Publish Dialog="MyMaintenanceTypeDlg" Control="RemoveButton" Event="NewDialog" Value="MyVerifyReadyDlg">1</Publish>
+      <!--<Publish Dialog="MyMaintenanceTypeDlg" Control="RemoveButton" Event="NewDialog" Value="MyExitDialog">1</Publish>-->
+      <Publish Dialog="MyMaintenanceTypeDlg" Control="Back" Event="NewDialog" Value="MyMaintenanceWelcomeDlg">1</Publish>
+      
+      <Publish Dialog="MyExitDialog" Control="Finish" Event="EndDialog" Value="Return" Order="999">1</Publish>
+      <!--<Publish Dialog="MyExitDialog" Control="Finish" Event="DoAction"  Value="ExecuteManageabilityResourceTranslatorTool">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1</Publish>-->
+      
+      <Property Id="ARPNOMODIFY" Value="1" />
+    </UI>
+
+    <UIRef Id="WixUI_Common" />
+
+    <InstallUISequence>
+      <AppSearch Before="LaunchGetPreviousInstallInfo"></AppSearch>
+      <Custom Action="LaunchGetPreviousInstallInfo" Before="FindRelatedProducts"></Custom>
+      <Custom Action="AlreadyUpdated" After="FindRelatedProducts">NOT (SAME_VERSION_FOUND = "")</Custom>
+      <Custom Action="NoDowngrade" After="FindRelatedProducts">NOT (LATER_VERSION_FOUND = "")</Custom>
+    </InstallUISequence>
+
+  </Fragment>
+</Wix>

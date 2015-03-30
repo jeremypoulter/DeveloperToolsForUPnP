@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+
+    <!--  Add the shortcuts to the Start Menu -->
+    <DirectoryRef Id="APPLICATIONSHORTCUTDIRECTORY">
+      <Component Id="DeviceSnifferShortcut1" Guid="E510F3DA-82AA-11DF-8814-C00000000007">
+        <Shortcut Id="DeviceSnifferStartMenuShortcut"  Icon="DSIcon1.ico"
+                  Name="Device Sniffer"
+                  Description="Run Device Sniffer"
+                  Target="[APPLICATIONROOTDIRECTORY]Device Sniffer.exe"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" >
+        <Icon Id="DSIcon1.ico" SourceFile="!(wix.DSIcon)" />
+        </Shortcut>
+        <RegistryValue Root="HKCU" Key="Software\DigitalLivingNetworkAlliance\DeviceSpy"  Type="integer" Value="2" KeyPath="yes"/>
+        <RemoveFolder Id="APPLICATIONSHORTCUTDIRECTORY" On="uninstall" />
+      </Component>
+
+      <Component Id="DeviceSpyShortcut1" Guid="E510F3DA-82AA-11DF-8814-C00000000009">
+        <Shortcut Id="DeviceSpyStartMenuShortcut"  Icon="DSpyIcon1.ico"
+                  Name="Device Spy"
+                  Description="Run Device Spy"
+                  Target="[APPLICATIONROOTDIRECTORY]Device Spy.exe"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" >
+        <Icon Id="DSpyIcon1.ico" SourceFile="!(wix.DSpyIcon)" />
+        </Shortcut>
+        <RegistryValue Root="HKCU" Key="Software\DigitalLivingNetworkAlliance\DeviceSpy"  Type="integer" Value="2" KeyPath="yes"/>
+      </Component>
+
+      <Component Id="NetworkLightShortcut1" Guid="E510F3DA-82AA-11DF-8814-C00000000010">
+        <Shortcut Id="NetworkLightStartMenuShortcut"  Icon="NLIcon1.ico"
+                  Name="Network Light"
+                  Description="Run Network Light"
+                  Target="[APPLICATIONROOTDIRECTORY]Network Light.exe"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" >
+        <Icon Id="NLIcon1.ico" SourceFile="!(wix.NLIcon)" />
+        </Shortcut>
+        <RegistryValue Root="HKCU" Key="Software\DigitalLivingNetworkAlliance\DeviceSpy"  Type="integer" Value="2" KeyPath="yes"/>
+      </Component>
+
+    </DirectoryRef>
+
+
+    <DirectoryRef Id="DesktopFolder">
+      <!--  Add the shortcuts to the Desktop -->
+      <Component Id="DeviceSnifferShortcut2" Guid="E510F3DA-82AA-11DF-8814-C00000000019">
+        <Condition >INSTALLDESKTOPSHORTCUT = "1"</Condition>
+        <Shortcut Id="DeviceSnifferDesktopShortcut"  Icon="DSIcon2.ico"
+                  Name="Device Sniffer"
+                  Description="Run Device Sniffer"
+                  Target="[APPLICATIONROOTDIRECTORY]Device Sniffer.exe"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" >
+          <Icon Id="DSIcon2.ico" SourceFile="!(wix.DSIcon)" />
+        </Shortcut>
+        <RegistryValue Root="HKCU" Key="Software\DigitalLivingNetworkAlliance\DeviceSpy"  Type="integer" Value="2" KeyPath="yes"/>
+      </Component>
+
+      <Component Id="DeviceSpyShortcut2" Guid="E510F3DA-82AA-11DF-8814-C00000000020">
+        <Condition >INSTALLDESKTOPSHORTCUT = "1"</Condition>
+        <Shortcut Id="DeviceSpyDesktopShortcut"  Icon="DSpyIcon2.ico"
+                  Name="Device Spy"
+                  Description="Run Device Spy"
+                  Target="[APPLICATIONROOTDIRECTORY]Device Spy.exe"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" >
+          <Icon Id="DSpyIcon2.ico" SourceFile="!(wix.DSpyIcon)" />
+        </Shortcut>
+        <RegistryValue Root="HKCU" Key="Software\DigitalLivingNetworkAlliance\DeviceSpy"  Type="integer" Value="2" KeyPath="yes"/>
+      </Component>
+
+      <Component Id="NetworkLightShortcut2" Guid="E510F3DA-82AA-11DF-8814-C00000000022">
+        <Condition >INSTALLDESKTOPSHORTCUT = "1"</Condition>
+        <Shortcut Id="NetworkLightDesktopShortcut"  Icon="NLIcon2.ico"
+                  Name="Network Light"
+                  Description="Run Network Light"
+                  Target="[APPLICATIONROOTDIRECTORY]Network Light.exe"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" >
+          <Icon Id="NLIcon2.ico" SourceFile="!(wix.NLIcon)" />
+        </Shortcut>
+        <RegistryValue Root="HKCU" Key="Software\DigitalLivingNetworkAlliance\DeviceSpy"  Type="integer" Value="2" KeyPath="yes"/>
+      </Component>
+
+    </DirectoryRef>
+
+  </Fragment>
+</Wix>

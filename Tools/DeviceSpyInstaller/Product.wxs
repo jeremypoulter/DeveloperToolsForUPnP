@@ -1,0 +1,105 @@
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension" xmlns:sql="http://schemas.microsoft.com/wix/SqlExtension">
+  <?define UpgradeCode = "5DB63B4E-78CA-4C6E-85A1-5E26B44DFF24"?>
+  <?define ProductName = "DeviceSpy"?>
+  <?define Manufacturer = "Open Source/DLNA"?>
+  <?define ProductVersion = "0.0.69"?>
+  <?define ProductCode = "9B679EC9-1708-41F7-9C1B-C002B6AA2C93"?>
+  <!-- Don't forget to change the product code when changing the version number! -->
+
+  <Product Id="$(var.ProductCode)"
+           Name="$(var.ProductName)"
+           Language="1033"
+           Codepage="1252"
+           Version="$(var.ProductVersion)"
+           Manufacturer="$(var.Manufacturer)"
+           UpgradeCode="$(var.UpgradeCode)">
+    <Package Id="*"
+             Description="Enhanced version of Device Spy (from Developer Tools for UPnP Technologies) for use in DLNA certification"
+             Comments="v$(var.ProductVersion), http://dlna.org/"
+             InstallerVersion="200"
+             Compressed="yes"
+             Languages="1033"
+             SummaryCodepage="1252"
+             Keywords="Installer" />
+
+    <Upgrade Id="$(var.UpgradeCode)">
+      <UpgradeVersion OnlyDetect="yes" Property="SAME_VERSION_FOUND"
+        Minimum="$(var.ProductVersion)" IncludeMinimum="yes"
+        Maximum="$(var.ProductVersion)" IncludeMaximum="yes" />
+      <UpgradeVersion OnlyDetect="yes" Property="LATER_VERSION_FOUND"
+        Minimum="$(var.ProductVersion)" IncludeMinimum="no" />
+      <UpgradeVersion OnlyDetect="no" Property="EARLIER_VERSION_FOUND"
+        Minimum="0.0.0" IncludeMinimum="yes"
+        Maximum="$(var.ProductVersion)" IncludeMaximum="no" />
+    </Upgrade>
+
+    <Property Id="MSIUSEREALADMINDETECTION" Value="1" />
+    <Media Id="1" Cabinet="Product.cab" EmbedCab="yes" CompressionLevel="high"  />
+
+    <!-- Define the directory structure -->
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramMenuFolder" Name="PMFFiles" >
+        <Directory Id="APPLICATIONSHORTCUTDIRECTORY" Name="Device Spy" />
+      </Directory>
+      <Directory Id="DesktopFolder" Name="DTFiles" />
+      <Directory Id="ProgramFilesFolder">
+        <!--<Directory Id="ProgramFiles64Folder">-->
+        <Directory Id="MANUFACTURERROOTDIRECTORY" Name="Digital Living Network Alliance">
+          <Directory Id="APPLICATIONROOTDIRECTORY" Name="Device Spy">
+            <Directory Id="TEMPFILESDIRECTORY" Name="TEMP FILES">
+            </Directory>
+          </Directory>
+        </Directory>
+      </Directory>
+      <Directory Id="WindowsFolder" Name="Windows" />
+        <Directory Id="WindowsSystem32" Name="System32" />
+    </Directory>
+
+    <!-- Define the installation components -->
+    <ComponentGroup Id="ServerProducts"  >
+      <ComponentGroupRef Id="DeviceSpyGroup" />
+    </ComponentGroup>
+
+    <!-- Tell WiX to install the files -->
+    <Feature Id="ProductFeatures" Title="Device Spy" Level="1">
+      <ComponentGroupRef Id="ServerProducts" />
+      <ComponentRef Id="DeviceSnifferShortcut1" />
+      <ComponentRef Id="DeviceSnifferShortcut2" />
+      <ComponentRef Id="DeviceSpyShortcut1" />
+      <ComponentRef Id="DeviceSpyShortcut2" />
+      <ComponentRef Id="NetworkLightShortcut1" />
+      <ComponentRef Id="NetworkLightShortcut2" />
+      <!--<ComponentRef Id="UninstallProductShortcut" />-->
+    </Feature>
+
+    <!-- Define the UI -->
+    <UI>
+      <UIRef Id="MyWixUI_InstallDir" />
+    </UI>
+
+    <Binary Id="CustomAction" SourceFile="..\..\..\Installer Custom Actions\bin\Debug\InstallerCustomActions.CA.dll" />
+
+    <CustomAction Id="AlreadyUpdated" Error="[ProductName] has already been updated to latest version." />
+    <CustomAction Id="NoDowngrade"  Error="A later version of [ProductName] is already installed." />
+
+
+    <CustomAction Id="LaunchGetPreviousInstallInfo" BinaryKey="CustomAction" DllEntry="CAGetPreviousInstallInfo" Return="check" Execute="immediate"  HideTarget="no" Impersonate="no" />
+    <CustomAction Id="LaunchSetPropertyValues" BinaryKey="CustomAction" DllEntry="CASetPropertyValues" Return="check" Execute="immediate"  HideTarget="no" Impersonate="no" />
+    <CustomAction Id="LaunchCommit" BinaryKey="CustomAction" DllEntry="CACommit" Execute="commit" Return="check" HideTarget="no" Impersonate="no" ></CustomAction>
+    <CustomAction Id="LaunchPostUninstall" BinaryKey="CustomAction" DllEntry="CAPostUninstall" Execute="deferred" Return="check" HideTarget="no" Impersonate="no" ></CustomAction>
+
+    <InstallExecuteSequence>
+      <Custom Action="LaunchGetPreviousInstallInfo" Before="FindRelatedProducts"></Custom>
+      <Custom Action="AlreadyUpdated" After="FindRelatedProducts">NOT (SAME_VERSION_FOUND = "")</Custom>
+      <Custom Action="NoDowngrade" After="FindRelatedProducts">NOT (LATER_VERSION_FOUND = "")</Custom>
+      <RemoveExistingProducts After="InstallInitialize">NOT (EARLIER_VERSION_FOUND = "")</RemoveExistingProducts>
+      <Custom Action="LaunchSetPropertyValues" Before="InstallFiles"></Custom>
+      <Custom Action="LaunchCommit" After="InstallFiles">(NOT INSTALLED) AND (NOT REMOVE="ALL")</Custom>
+      <Custom Action="LaunchPostUninstall" Before="InstallFinalize">(NOT UPGRADINGPRODUCTCODE) AND (REMOVE="ALL")</Custom>
+    </InstallExecuteSequence>
+
+    <!--Global properties include effecting installation behaviors-->
+    <?include Properties.wxi ?>
+
+  </Product>
+</Wix>
