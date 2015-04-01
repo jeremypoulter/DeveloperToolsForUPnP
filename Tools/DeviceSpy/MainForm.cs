@@ -97,6 +97,7 @@ namespace UPnpSpy
         private System.Windows.Forms.MenuItem menuItem15;
         private MenuItem menuItem6;
         private MenuItem openWebPageMenuItem;
+        private MenuItem menuItem8;
         private System.ComponentModel.IContainer components;
 
         public MainForm(string[] args)
@@ -133,6 +134,12 @@ namespace UPnpSpy
             scp = new UPnPSmartControlPoint(new UPnPSmartControlPoint.DeviceHandler(HandleAddedDevice));
             scp.OnRemovedDevice += new UPnPSmartControlPoint.DeviceHandler(HandleRemovedDevice);
             //			scp.OnUpdatedDevice += new UPnPSmartControlPoint.DeviceHandler(HandleUpdatedDevice);
+
+            // Restore the useragent if we have saved one
+            String userAgent = Properties.Settings.Default.UserAgentCurrent;
+            if (!String.IsNullOrEmpty(userAgent)) {
+                scp.UserAgent = userAgent;
+            }
         }
 
         /// <summary>
@@ -217,6 +224,7 @@ namespace UPnpSpy
             this.menuItem11 = new System.Windows.Forms.MenuItem();
             this.ClearEventLogMenuItem = new System.Windows.Forms.MenuItem();
             this.splitter2 = new System.Windows.Forms.Splitter();
+            this.menuItem8 = new System.Windows.Forms.MenuItem();
             this.SuspendLayout();
             // 
             // deviceTree
@@ -473,7 +481,8 @@ namespace UPnpSpy
             this.collapseAllMenuItem,
             this.menuItem16,
             this.menuItem3,
-            this.viewStatusbarMenuItem});
+            this.viewStatusbarMenuItem,
+            this.menuItem8});
             resources.ApplyResources(this.menuItem7, "menuItem7");
             // 
             // rescanMenuItem
@@ -621,6 +630,12 @@ namespace UPnpSpy
             resources.ApplyResources(this.splitter2, "splitter2");
             this.splitter2.Name = "splitter2";
             this.splitter2.TabStop = false;
+            // 
+            // menuItem8
+            // 
+            this.menuItem8.Index = 7;
+            resources.ApplyResources(this.menuItem8, "menuItem8");
+            this.menuItem8.Click += new System.EventHandler(this.optionsMenuItem_Click);
             // 
             // MainForm
             // 
@@ -1611,6 +1626,31 @@ namespace UPnpSpy
                     System.Diagnostics.Process.Start(link);
                 }
                 catch (System.ComponentModel.Win32Exception) { }
+            }
+        }
+
+        private void optionsMenuItem_Click(object sender, EventArgs e)
+        {
+            OptionsDialog optionsForm = new OptionsDialog();
+
+            optionsForm.UserAgent = scp.UserAgent;
+
+            if (optionsForm.ShowDialog() == DialogResult.OK)
+            {
+                bool saveOptions = false;
+                if (scp.UserAgent != optionsForm.UserAgent)
+                {
+                    Properties.Settings.Default.UserAgentCurrent = optionsForm.UserAgent;
+                    saveOptions = true;
+
+                    scp.UserAgent = optionsForm.UserAgent;
+                    scp.Rescan();
+                }
+
+                if (saveOptions)
+                {
+                    Properties.Settings.Default.Save();
+                }
             }
         }
 

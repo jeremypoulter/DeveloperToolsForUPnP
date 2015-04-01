@@ -131,7 +131,18 @@
     <Compile Include="MethodInvoke.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="OptionsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OptionsDialog.Designer.cs">
+      <DependentUpon>OptionsDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="UPnpArgumentControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -157,6 +168,9 @@
     <EmbeddedResource Include="MethodInvoke.resx">
       <DependentUpon>MethodInvoke.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OptionsDialog.resx">
+      <DependentUpon>OptionsDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UPnpArgumentControl.fr.resx">
       <DependentUpon>UPnpArgumentControl.cs</DependentUpon>
@@ -190,6 +204,13 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
