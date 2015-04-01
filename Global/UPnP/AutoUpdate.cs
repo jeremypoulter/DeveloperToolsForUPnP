@@ -15,6 +15,7 @@ namespace OpenSource.UPnP
     {
         public static int existingversion = 0;
         public static Guid updatecode = Guid.Empty;
+        public static bool UpdateEnabled { get { return ReadUpdateSettings(); } }
         private static string ShortProductName = null;
         private static string RegistryKey = "UpdateCheck";
         private static HttpRequestor requestor = null;

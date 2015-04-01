@@ -938,7 +938,7 @@ namespace UPnpSpy
             if (infoObject == null)
             {
                 Items.Add(new ListViewItem(new string[] { "Product name", "Device Spy" }));
-                Items.Add(new ListViewItem(new string[] { "Version", AutoUpdate.VersionString }));
+                Items.Add(new ListViewItem(new string[] { "Version", AutoUpdate.UpdateEnabled ? AutoUpdate.VersionString : Application.ProductVersion }));
                 //Items.Add(new ListViewItem(new string[] {"UPnP devices found",DeviceList.Length.ToString()}));
             }
             else if (infoObject.GetType() == typeof(OpenSource.UPnP.UPnPDevice))
