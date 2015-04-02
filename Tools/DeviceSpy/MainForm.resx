@@ -172,7 +172,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj0yLjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABE
-        FwAAAk1TRnQBSQFMAgEBCAEAASABAAEgAQABEAEAARABAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAFA
+        FwAAAk1TRnQBSQFMAgEBCAEAASgBAAEoAQABEAEAARABAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAFA
         AwABMAMAAQEBAAEYBgABJP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AB4A//8n/wPnAc4CxgHnAt4B/wL3
         If8E1gHOAcYB7wLnAf8C9y3/Aa0BpQKtAZQCrQGUAq0BlAKtAZQCrQGUAq0BlAGtA9YM/wMQIZQDIQz/
         AfcC/wFrAb0B1gExAYwBrQFKAXsBlAFrAYQBjAGUApwBvQK1Ad4C1gH3Au8S/wHGAecB9wFaAa0BxgE5
@@ -468,6 +468,9 @@
   </data>
   <data name="viewStatusbarMenuItem.Text" xml:space="preserve">
     <value>Status &amp;bar</value>
+  </data>
+  <data name="menuItem8.Text" xml:space="preserve">
+    <value>Options ...</value>
   </data>
   <data name="menuItem7.Text" xml:space="preserve">
     <value>&amp;View</value>
@@ -953,6 +956,12 @@
     <value>ClearEventLogMenuItem</value>
   </data>
   <data name="&gt;&gt;ClearEventLogMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.MenuItem, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;menuItem8.Name" xml:space="preserve">
+    <value>menuItem8</value>
+  </data>
+  <data name="&gt;&gt;menuItem8.Type" xml:space="preserve">
     <value>System.Windows.Forms.MenuItem, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
