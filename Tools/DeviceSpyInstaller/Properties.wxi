@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include>
+  <Icon Id="InstallerIcon" SourceFile="installer.ico" />
+  <Property Id="MSIFASTINSTALL" Value="3" />
+  <Property Id="ASSISTANCE_USERS">cur</Property>
+  <!-- cur or all -->
+
+  <!--User entered parameter Properties-->
+  <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONROOTDIRECTORY" Secure="yes" />
+  <Property Id="WIXUI_TEMPDIR" Value="TEMPFILESDIRECTORY" Secure="yes" />
+  <Property Id="INSTALL_LOG_FILE" Value="C:\"  Secure="yes" />
+  <Property Id="INSTALL_VERSION" Value="$(var.ProductVersion)" Secure="yes" />
+
+  <!--Installer Properties-->
+  <Property Id="ALLUSERS" Value="1" Secure="yes" />
+  <Property Id="ARPPRODUCTICON" Value="InstallerIcon" />
+  <Property Id="ARPINSTALLLOCATION" Value="C:\" Secure="yes" />
+
+  <Property Id="WIXUI_EXITDIALOGOPTIONALTEXT" Value="Click 'Finish' to exit." />
+  <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch Intel System Defense Utility"  />
+
+  <!--UI Properties-->
+  <WixVariable Id="WixUIBannerBmp" Value="installer.bmp" />
+  <WixVariable Id="LicenseRTFFile" Value="license.rtf" />
+
+  <!--Product Paths-->
+  <?define DSPath = "..\DeviceSniffer\bin\"?>
+  <?define DSpyPath = "..\DeviceSpy\bin\"?>
+  <?define NLPath = "..\NetworkLight\bin\"?>
+  <?define UPnPPath = "..\..\Global\UPnP\bin\"?>
+
+  <WixVariable Id="FileHashPath" Value="..\..\Global\FileHash\bin\"  />
+  <WixVariable Id="WMPPath" Value="[WindowsSystem32]"   />
+
+  <!--Icons-->
+  <WixVariable Id="DSIcon" Value="..\DeviceSniffer\UPnPSniffer.ico"   />
+  <WixVariable Id="DSpyIcon" Value="..\DeviceSpy\DeviceSpy.ico"   />
+  <WixVariable Id="NLIcon" Value="..\NetworkLight\NetworkLight.ico"   />
+
+  <!--Component Files-->
+  <WixVariable Id="DSExecutable" Value="$(var.DSPath)$(var.DeviceSniffer.Configuration)\Device Sniffer.exe"   />
+  <WixVariable Id="DSDebug" Value="$(var.DSPath)$(var.DeviceSniffer.Configuration)\Device Sniffer.pdb"   />
+
+  <WixVariable Id="DSpyExecutable" Value="$(var.DSpyPath)$(var.DeviceSpy.Configuration)\Device Spy.exe"   />
+  <WixVariable Id="DSpyDebug" Value="$(var.DSpyPath)$(var.DeviceSpy.Configuration)\Device Spy.pdb"   />
+
+  <WixVariable Id="NLExecutable" Value="$(var.NLPath)$(var.NetworkLight.Configuration)\Network Light.exe"   />
+  <WixVariable Id="NLDebug" Value="$(var.NLPath)$(var.NetworkLight.Configuration)\Network Light.pdb"   />
+
+  <WixVariable Id="UPnPExecutable" Value="$(var.UPnPPath)$(var.UPnP.Configuration)\UPnP.dll"   />
+  <WixVariable Id="UPnPDebug" Value="$(var.UPnPPath)$(var.UPnP.Configuration)\UPnP.pdb"   />
+  
+  <!--Other installer source resources paths-->
+  <WixVariable Id="ImagesPath" Value="Images\"  />
+
+  <!--Properties for use in the deferred custom actions-->
+  <Property Id="LaunchBeforeInstall"   Value="1" />
+  <Property Id="LaunchCommit"   Value="1" />
+  
+</Include>
